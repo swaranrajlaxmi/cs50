@@ -16,7 +16,7 @@ int main()
         //printing spaces in right alighned pyramid
         for (int j = 0; j < (height - (i + 1)); j++)
         {
-           printf(" ");
+            printf(" ");
         }
         //printing hash in right alighned pyrmid
         for (int k = 0; k < (i + 1); k++)
