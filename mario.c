@@ -10,7 +10,7 @@ int main()
         height = get_int("Height: ");
     }
     while (height < 1 || height > 8);
-    //
+    //printing hash as like right alighned pyramid
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < height; j++)
@@ -21,7 +21,7 @@ int main()
             }
             else
             {
-               printf("#"); 
+                printf("#"); 
             }
         }
         printf("\n");       
