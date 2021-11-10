@@ -47,11 +47,13 @@ int main(void)
    {
        starting_digit = starting_digit / 10;
    }
+   
    if(sum % 10 != 0)
    {
        printf("INVALID\n");
    }
-    if(sum % 10 == 0)
+   
+    else
     {
    
             if(count == 16 && (starting_digit >= 51 && starting_digit <= 55))
