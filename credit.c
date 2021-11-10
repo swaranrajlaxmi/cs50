@@ -51,8 +51,7 @@ int main(void)
    {
        printf("INVALID\n");
    }
-    if(sum % 10 == 0)
-    {
+
    
             if(count == 16 && (starting_digit >= 51 && starting_digit <= 55))
             {
@@ -70,7 +69,7 @@ int main(void)
             {
                 printf("INVALID\n");
             }
-    }
+    
     
     
 }
