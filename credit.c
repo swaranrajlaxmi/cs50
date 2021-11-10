@@ -10,7 +10,7 @@ int main(void)
     {
         Number = get_long("Number: ");
     }
-    while(Number < 1000000000000 || Number > 9999999999999999);
+    while(Number < 1 || Number > 9999999999999999);
     // Apply luhn's algorithm for checksum
     long dividend = Number;
     int count = 0;
@@ -47,21 +47,26 @@ int main(void)
    {
        starting_digit = starting_digit / 10;
    }
-   if(sum % 10 != 0 && (count != 13 && count != 15 && count != 16))
+   if(sum % 10 != 0)
    {
        printf("INVALID\n");
    }
-   else if(count == 16 && (starting_digit >= 51 && starting_digit <= 55))
-   {
-       printf("MASTERCARD\n");
-   }
-   else if(count == 15 && (starting_digit == 34 || starting_digit == 37))
-   {
-       printf("AMEX\n");
-   }
-   else if((count == 13 || count == 16) && starting_digit >= 40 && starting_digit <= 49)
-   {
-       printf("VISA\n");
-   }
-     
+    if(sum % 10 == 0)
+    {
+   
+            if(count == 16 && (starting_digit >= 51 && starting_digit <= 55))
+            {
+                printf("MASTERCARD\n");
+            }
+            else if(count == 15 && (starting_digit == 34 || starting_digit == 37))
+            {
+                printf("AMEX\n");
+            }
+            else if((count == 13 || count == 16) && starting_digit >= 40 && starting_digit <= 49)
+            {
+                printf("VISA\n");
+            }
+    }
+    
+    
 }
