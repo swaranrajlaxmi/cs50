@@ -36,7 +36,7 @@ int main(void)
     printf("%i, %i, %i\n", letters , words, sentences);
 
     // calculate coleman liau index
-    index = round (0.0588 * ((letters *100) / words) - 0.296 * ((sentences * 100) / words) - 15.8);
+    index = round (0.0588 * ((letters *100) / (float) words) - 0.296 * ((sentences * 100) / (float)words) - 15.8);
     
 
     //grade level
