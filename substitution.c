@@ -4,8 +4,6 @@
 # include <stdlib.h>
 # include <ctype.h>
 
-//Prototype functions
-void encipher(char *text, char *argv);
 int main(int argc, string argv[])
 {
     //TODO: check for single command line arguments and validate key
@@ -41,25 +39,19 @@ int main(int argc, string argv[])
     //TODO: Get plaintext:
     string text = get_string("plaintext:  ");
     //encipher
-    encipher(text, argv[1]);
-    
-}
-
-void encipher(char *text, char *argv)
-{
     printf("ciphertext: ");
-    
-    for (int i = 0; i < strlen(argv); i++)
+    char *k = (argv[1]);
+    for (int i = 0; i < strlen(text); i++)
     {
         if (isupper(text[i]))
         {
             int value = text[i] - 65;
-            printf("%c", toupper(argv[value]));
+            printf("%c", toupper(k[value]));
         }
         else if (islower(text[i]))
         {
             int value = text[i] - 97;
-            printf("%c", tolower(argv[value]));
+            printf("%c", tolower(k[value]));
         }
         else
         {
