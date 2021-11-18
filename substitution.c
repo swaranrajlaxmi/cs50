@@ -41,18 +41,22 @@ int main(int argc, string argv[])
     //encipher
     printf("ciphertext: ");
     char *k = (argv[1]);
+    //iterate over each character of text to encrypt
     for (int i = 0; i < strlen(text); i++)
     {
+        //TODO: if text is uppercase encrypt in uppercase only
         if (isupper(text[i]))
         {
             int value = text[i] - 65;
             printf("%c", toupper(k[value]));
         }
+        //TODO: if text is lowercase encrypt in lowercase only
         else if (islower(text[i]))
         {
             int value = text[i] - 97;
             printf("%c", tolower(k[value]));
         }
+        //TODO: leave non-alphabetical characters unchanged
         else
         {
             printf("%c", text[i]);
