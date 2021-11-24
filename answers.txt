@@ -1,0 +1,11 @@
+sort1 uses: bubble sort algorithm
+
+How do you know?: Sort1 is taking almost the same time as Sort3 in both random and reversed text patterns, but it becomes more efficient in sorted text patterns as the bubble sort algorithm does for lower bound.
+
+sort2 uses: merge sort algorithm
+
+How do you know?: Sort2 is less time-taking than sort1 and sort3 and behaves the same in all the text patterns as the merge sort algorithm does in both upper and lower bound. Therefore, it uses a merge sort algorithm.
+
+sort3 uses: selection sort algorithm
+
+How do you know?: Sort3 is taking almost the same time in all text patterns as the selection sort algorithm does for both in upper bound and lower bound.
