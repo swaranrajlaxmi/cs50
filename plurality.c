@@ -61,7 +61,6 @@ int main(int argc, string argv[])
 
     // Display winner of election
     print_winner();
-    printf("\n");
     
 }
 
@@ -99,8 +98,10 @@ void print_winner(void)
         if (candidates[i].votes == max_vote)
         {
             printf("%s", candidates[i].name);
+            printf("\n");
         }
     }
+    
     return;
 }
 
