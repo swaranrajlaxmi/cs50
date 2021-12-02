@@ -129,7 +129,7 @@ int main(int argc, string argv[])
 bool vote(int voter, int rank, string name)
 {
     // Check the voter and vote is valid
-      for (int v = 0; v < candidate_count; v++)
+    for (int v = 0; v < candidate_count; v++)
     {
         if (strcmp(name, candidates[v].name) == 0)
         {
@@ -162,8 +162,7 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
-    //
-      // Check for votes more than 50%+
+    // Check for votes more than 50%+
     for (int v = 0; v < candidate_count; v++)
     {
         if (candidates[v].votes > (voter_count / 2))
@@ -180,7 +179,7 @@ bool print_winner(void)
 int find_min(void)
 {
     //find the minimum vote
-     int vote = voter_count;
+    int vote = voter_count;
     for (int v = 0; v < candidate_count; v++)
     {
         if (candidates[v].votes < vote && candidates[v].eliminated == false)
