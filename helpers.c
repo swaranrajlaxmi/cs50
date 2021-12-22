@@ -15,7 +15,7 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
             // Calculate average
             average = round((image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3.0);
             image[i][j].rgbtBlue = image[i][j].rgbtGreen = image[i]  [j].rgbtRed = average;
-         }
+        }
     }
     return;
 }
@@ -24,10 +24,10 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
 void sepia(int height, int width, RGBTRIPLE image[height][width])
 {
     // Loop through rows
-    for(int i = 0; i < height; i++)
+    for (int i = 0; i < height; i++)
     {
         // Loop through columns
-        for(int j = 0; j < width; j++)
+        for (int j = 0; j < width; j++)
         {
             float R = .393 * image[i][j].rgbtRed + .769 * image[i][j].rgbtGreen + .189 * image[i][j].rgbtBlue;
             float G = .349 * image[i][j].rgbtRed + .686 * image[i][j].rgbtGreen + .168 * image[i][j].rgbtBlue;
@@ -37,7 +37,7 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             int g = round(G);
             int b = round(B);
             
-            if ( r > 255)
+            if (r > 255)
             {
                 r = 255;
             }
@@ -47,7 +47,7 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             }
             if (b > 255)
             {
-                b= 255;
+                b = 255;
             }
 
             image[i][j].rgbtBlue = b;
@@ -63,10 +63,10 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
     int temp[3];
     // Loop through rows
-    for(int i = 0; i < height; i++)
+    for (int i = 0; i < height; i++)
     {
         // Loop through columns
-        for(int j = 0; j < width / 2; j++)
+        for (int j = 0; j < width / 2; j++)
         {
             // place the first pixel in temp variable
             temp[0] = image[i][j].rgbtBlue;
@@ -74,12 +74,12 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
             temp[2] = image[i][j].rgbtRed;
             // place the last pixel in first pixel
             image[i][j].rgbtBlue = image[i][width - 1 - j].rgbtBlue;
-            image[i][j].rgbtGreen = image[i][width -1 - j].rgbtGreen;
-            image[i][j].rgbtRed = image[i][width -1 - j].rgbtRed;
+            image[i][j].rgbtGreen = image[i][width - 1 - j].rgbtGreen;
+            image[i][j].rgbtRed = image[i][width - 1 - j].rgbtRed;
             // place the temp variable in last pixel
             image[i][width - 1 - j].rgbtBlue = temp[0];
-            image[i][width -1 - j].rgbtGreen = temp[1];
-            image[i][width -1 - j].rgbtRed = temp[2];
+            image[i][width - 1 - j].rgbtGreen = temp[1];
+            image[i][width - 1 - j].rgbtRed = temp[2];
         }
     }
     return;
@@ -91,10 +91,10 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     //create temp array
     RGBTRIPLE temp[height][width];
     // Loop through rows
-    for(int i = 0; i < height; i++)
+    for (int i = 0; i < height; i++)
     {
         //Loop through columns
-        for(int j = 0; j < width; j++)
+        for (int j = 0; j < width; j++)
         {
             float sumRed = 0;
             float sumBlue = 0;
@@ -102,12 +102,12 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             int count = 0.00;
             
             //loop for each pixel vertical and horizontal
-            for(int h = -1; h < 2; h++)
+            for (int h = -1; h < 2; h++)
             {
-                for(int w = -1; w < 2; w++)
+                for (int w = -1; w < 2; w++)
                 {
                     //check if pixel is outside rows and columns
-                    if(i + h < 0 || i + h > height - 1 || j + w < 0 || j + w > width - 1)
+                    if (i + h < 0 || i + h > height - 1 || j + w < 0 || j + w > width - 1)
                     {
                         continue;
                     }
@@ -123,9 +123,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             temp[i][j].rgbtRed = round(sumRed / count);
         }
     }
-    for(int i = 0; i < height; i++)
+    for (int i = 0; i < height; i++)
     {
-        for(int j = 0; j < width; j++)
+        for (int j = 0; j < width; j++)
         {
             image[i][j] = temp[i][j];
         }
