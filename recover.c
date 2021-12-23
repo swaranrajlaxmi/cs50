@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
         return 1;
     }
     else
-        style50 recover.c
 // Open card.raw
     {
         FILE *inptr = fopen(argv[1], "r");
@@ -42,7 +41,7 @@ int main(int argc, char *argv[])
                     fclose(outptr);
                 }
                 //name the file and open to write
-                sprintf(filename, "%03i.jpg", count);
+                sprintf(filename, "%00i.jpg", count);
                 outptr = fopen(filename, "w");
                 count++;
             }
