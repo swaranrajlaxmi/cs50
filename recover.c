@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
                     fclose(outptr);
                 }
                 //name the file and open to write
-                sprintf(filename, "%00i.jpg", count);
+                sprintf(filename, "%0i.jpg", count);
                 outptr = fopen(filename, "w");
                 count++;
             }
