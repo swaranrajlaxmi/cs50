@@ -13,6 +13,7 @@ def main():
         print()
 
 
+
 def get_height():
     while True:
         try:
