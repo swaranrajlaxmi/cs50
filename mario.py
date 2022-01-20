@@ -5,12 +5,12 @@ import importlib
 def main():
     height = get_height()
     for i in range(height):
-        print(" ")
         for j in range(height):
             if j<(height-(i+1)):
                 print(" ", end="")
             else:
                 print("#", end="")
+            print(" ")
 
 
 def get_height():
