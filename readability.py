@@ -5,7 +5,7 @@ import importlib
 text = input("Text: ")
 TextLength = len(text)
 # initialise parameters
-sentences =letters = 0
+sentences = letters = 0
 words = 1
 # count for letters, words, and sentences in the text
 for i in range(TextLength):
@@ -24,10 +24,7 @@ S = (sentences / words) * 100
 index = round(0.0588 * L - 0.296 * S - 15.8)
 if (index >= 16):
     print("Grade 16+")
-elif (index <=1):
+elif (index <= 1):
     print("Before Grade 1")
 else:
     print(f"Grade {index}")
-
-
-
