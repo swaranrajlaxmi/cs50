@@ -10,7 +10,7 @@ def main():
                 print(" ", end="")
             else:
                 print("#", end="")
-            print(" ")
+        print()
 
 
 def get_height():
