@@ -11,35 +11,36 @@ def main():
     # TODO: Read database file into a variable
     subsequence = []
     with open(sys.argv[1], "r") as csvfile:
-        reader = csv.DictReader(csvfile)
-        # database is in a table format
-        for i in range(1, len(reader.fieldnames)):
-            row = reader.fieldnames[i]
-            subsequence.append(row)
-        # search for every STR)
-        print(subsequence)
-
+        reader = csv.reader(csvfile)
+        for line in reader:
+            subsequence.append(line[1:])
+            print(subsequence)
+            break
 
     # TODO: Read DNA sequence file into a variable
+    sequence = ''
     with open(sys.argv[2], "r") as file:
-        sequence = file.read()
-        #print(sequence)
+        sequence_list = file.read()
+        for i in sequence_list:
+            sequence = sequence.join(i)
+        print(sequence)
         # read using the read() method on the file object.
         # This returns the contents of the file as a string.
 
     # TODO: Find longest match of each STR in DNA sequence
     max_count = []
     for i in range (len(subsequence[0])):
-        max_count.append(longest_match(sequence, subsequence))
+        max_count.append(longest_match(sequence, subsequence[0][i]))
 
 
     # TODO: Check database for matching profiles
     with open(sys.argv[1], "r") as csvfile:
-        reader = csv.reader(csvfile)
-        for line in reader:
+        second_reader = csv.reader(csvfile)
+        for line in second_reader:
             if (max_count == line[1:]):
                 (print(f"{line[0]} is the match"))
-        print("No match")
+            else:
+                print("No match")
 
     return
 
