@@ -177,9 +177,9 @@ def register():
         if not username:
             return apology("Username is required!", 400)
         elif not password:
-            return apology("Password is required!", 403)
+            return apology("Password is required!", 400)
         elif not confirmation:
-            return apology("Password confirmation is required!", 403)
+            return apology("Password confirmation is required!", 400)
 
         if password != confirmation:
             return apology("password do not match!", 400)
