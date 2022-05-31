@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="style.css" rel="stylesheet">
+    <title>Advance Search</title>
+</head>
+<body>
+    <header>
+        <nav class="bg-light navbar navbar-expand-md navbar-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="index.html"> <span class="blue">G</span><span class="red">o</span><span class="yellow">o</span><span class="blue">g</span><span class="green">l</span><span class="red">e</span></a>
+                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            <ul class="nav justify-content-end ad_ul">
+                <li class="nav-item"><a class="nav-link active" href="index.html">Google Search</a></li>
+                <li class="nav-item"><a class="nav-link active" href="image.html">Images</a></li>
+            </ul>
+          </div>
+        </nav>
+    </header>
+
+        <div id="div_navbar">
+            <nav class="navbar">
+                <span class="navbar-brand mb-0 h4">
+                    <label id="label_navbar">Advance Search</label>
+                </span>
+            </nav>
+        </div>
+
+        <hr>
+
+        <div id="div_body_control">
+          <div>
+            <div class=" row">
+              <div class="col-sm-2  ">
+                <span id="label_hdg_left">Find pages with...</span>
+              </div>
+              <div class="col-sm-6"> </div>
+              <div class="col-sm-4" id="col-4_adjust">
+                <span id="label_hdg_right">To do this in the search box.</span>
+              </div>
+            </div>
+          </div>
+            <form action="https://www.google.com/search" >
+
+                <div class=" row div_row ">
+                  <div class="col-sm-2 input_label_left ">
+                    <label>all these words:</label>
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control form-control-sm input_box" name="as_q" autofocus="autofocus">
+                  </div>
+                  <div class="col-sm-4  input_label_right">
+                    <label>Type the important words: <span class="input_label_right_span">tri-colour rat terrier</span></label>
+                  </div>
+                </div>
+
+                  <div class=" row div_row">
+                    <div class="col-sm-2  input_label_left">
+                      <label for="inputPassword">this exact word or phrase:</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control form-control-sm input_box" name="as_epq">
+                    </div>
+                    <div class="col-sm-4  input_label_right">
+                      <label>Put exact words in quotes: <span class="input_label_right_span">"rat terrier"</span></label>
+                    </div>
+                  </div>
+
+                  <div class=" row div_row">
+                    <div class="col-sm-2  input_label_left ">
+                      <label for="inputPassword">any of these words:</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control form-control-sm input_box" name="as_oq">
+                    </div>
+                    <div class="col-sm-4  input_label_right">
+                      <label>Type OR between all the words you want: <span class="input_label_right_span">miniature OR standard</span></label>
+                    </div>
+                  </div>
+
+                  <div class=" row div_row">
+                    <div class="col-sm-2  input_label_left ">
+                      <label for="inputPassword">none of these words:</label>
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control form-control-sm input_box" name="as_eq">
+                    </div>
+                    <div class="col-sm-4  input_label_right ">
+                      <label>Put a minus sign just before words that you don't want: <span class="input_label_right_span">-rodent, -"Jack Russell"</span></label>
+                    </div>
+                  </div>
+                  <div class=" row div_row">
+                    <div class="col-sm-2  input_label_left ">
+                    </div>
+                    <div class="col-sm-6 ">
+
+                      <input type="submit" class="btn btn-primary float-end" data-toggle="button" value="Advance Search">
+                    </div>
+                    <div class="col-sm-2  input_label_right ">
+                    </div>
+                  </div>
+
+            </form>
+        </div>
+
+</body>
+</html>
