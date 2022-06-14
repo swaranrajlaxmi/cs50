@@ -233,3 +233,15 @@ div.error-message {
     }
 }
 /* ^^^^^^^^^^^^^^^^^^^^^^ */
+
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+}
+
+.nav_list a {
+    margin-left: 20pt;
+}
+
+.nav_list {
+    text-align: center
+}
