@@ -1,0 +1,7 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% include "auctions/listing_layout.html" with auctions=auctions sub_title=category_full %}
+
+{% endblock %}
