@@ -39,7 +39,7 @@ class Auction(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=64, blank=False)
     description = models.CharField(max_length=300, blank=True)
-    current_price = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    current_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     category = models.CharField(max_length=3, choices=CATEGORY, default=AUDIO)
     image_url = models.URLField(blank=True)
     publication_date = models.DateTimeField(auto_now_add=True)

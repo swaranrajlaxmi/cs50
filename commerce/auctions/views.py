@@ -18,7 +18,7 @@ from .models import User, Auction, Bid, Comment, Watchlist
 
 class CreateListingForm(forms.ModelForm):
     """Aucton model form"""
-    title = forms.CharField(label="Title", max_length=20, required=True, widget=forms.TextInput(attrs={
+    title = forms.CharField(label="Title", max_length=64, required=True, widget=forms.TextInput(attrs={
         "autocomplte": "off", "aria-label": "title", "class": "form-control"
     }))
     description= forms.CharField(label="Description", widget=forms.Textarea(attrs={
@@ -30,7 +30,7 @@ class CreateListingForm(forms.ModelForm):
     category = forms.ChoiceField(required=True, choices=Auction.CATEGORY, widget=forms.Select(attrs={
         "class": "form-control"
     }))
-    current_price = forms.DecimalField(label="Price", label_suffix=False, max_digits=5, decimal_places=2, required=True, widget=forms.NumberInput(attrs={
+    current_price = forms.DecimalField(label="Price", label_suffix=False, max_digits=10, decimal_places=2, required=True, widget=forms.NumberInput(attrs={
         "type":"number", "step": "0.01", "class": "form-control"
     }))
 
