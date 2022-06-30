@@ -60,13 +60,12 @@ function load_mailbox(mailbox) {
     .then(response => response.json())
     .then(emails => {
       for (let i = 0; i < emails.length; i++) {
-        // extract values from emails
+        // take values from emails
         const id = emails[i]['id'];
         const sender = emails[i]['sender'];
         const recipients = emails[i]['recipients'];
         const subject = emails[i]['subject'];
         const time = emails[i]['timestamp'];
-        //'read' true or false
         const read = emails[i]['read'];
   
         // create div element (email listed in mailboxes)
@@ -77,9 +76,8 @@ function load_mailbox(mailbox) {
           email.classList.add("email-read");
         }
   
-        // add click event handler to div (aka email)
+        // add click event handler to div (email)
         email.addEventListener('click', function() {
-          // run viewEmail function when message clicked
           viewEmail(id);
         });
         
@@ -100,7 +98,7 @@ function load_mailbox(mailbox) {
     fetch(`/emails/${id}`)
     .then(response => response.json())
     .then(email => {
-      // extract values from object in email array
+      // extract values from object in email [array]
       const sender = email['sender'];
       const recipients = email['recipients'];
       const subject = email['subject'];
@@ -120,12 +118,10 @@ function load_mailbox(mailbox) {
         archiveButton.innerHTML = "Unarchive";
       }
       
-      // archive email when button clicked
       archiveButton.addEventListener('click', function() {
         archiveEmail(id, archived);
       });
   
-      // reply to email when button clicked
       replyButton.addEventListener('click', function() {
         replyEmail(email);
       });
@@ -187,7 +183,7 @@ function load_mailbox(mailbox) {
     } else {
       document.querySelector('#compose-subject').value = `Re: ${email['subject']}`;
     }
-    // add original email(s) to form
+    // add original email to form
     document.querySelector('#compose-body').value = `On ${email['timestamp']}, ${email['sender']} wrote:
   ${email['body']}
     `;
