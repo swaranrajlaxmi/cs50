@@ -90,20 +90,11 @@ def index(request):
 def user_panel(request):
     """User Panel view: shows all auctions that user: selling, sold, bidding, won."""
    
-    # Helpers
     all_distinct_bids =  Bid.objects.filter(user=request.user.id).values_list("auction", flat=True).distinct()
     won = []
-
-    # Get auctions currently being sold by the user
     selling = Auction.objects.filter(closed=False, seller=request.user.id).order_by("-publication_date").all()
-
-    # Get auction sold by the user
     sold = Auction.objects.filter(closed=True, seller=request.user.id).order_by("-publication_date").all()
-
-    # Get auctions currently being bid by the user
     bidding = Auction.objects.filter(closed=False, id__in = all_distinct_bids).all()
-
-    # Get auctions won by the user
     for auction in Auction.objects.filter(closed=True, id__in = all_distinct_bids).all():
         highest_bid = Bid.objects.filter(auction=auction.id).order_by('-bid_price').first()
 
@@ -124,7 +115,6 @@ def user_panel(request):
 
 @login_required(login_url="/login")
 def create_listing(request):
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = CreateListingForm(request.POST)
@@ -169,7 +159,7 @@ def listing_page(request, auction_id):
     except Auction.DoesNotExist:
         return render(request, "auctions/error_handling.html", {
             "code": 404,
-            "message": "Auction id doesn't exist"
+            "message": "Invalid auction id"
         })
 
     # Get info about bids
@@ -181,7 +171,7 @@ def listing_page(request, auction_id):
         if highest_bid is not None:
             winner = highest_bid.user
 
-            # Diffrent view for winner, seller and other users
+            # view is different for winner, seller and other users
             if request.user.id == auction.seller.id:
                 return render(request, "auctions/sold.html", {
                     "auction": auction,
@@ -239,7 +229,6 @@ def listing_page(request, auction_id):
 
 @login_required(login_url="/login")
 def watchlist(request):
-    """Watchlist views: shows all auctions that are on user's watchlist."""
     # Save info about the auction and go back to auction's page
     if request.method == "POST":
         # Info about the auction
@@ -252,7 +241,7 @@ def watchlist(request):
         except Auction.DoesNotExist:
             return render(request, "auctions/error_handling.html", {
                 "code": 404,
-                "message": "Auction id doesn't exist"
+                "message": "Invalid auction id"
             })
 
         # Add/delete from watchlist logic
@@ -275,7 +264,7 @@ def watchlist(request):
             except IntegrityError:
                 return render(request, "auctions/error_handling.html", {
                     "code": 400,
-                    "message": "Auction is already on your watchlist"
+                    "message": "Already on your watchlist"
                 })
 
         return HttpResponseRedirect("/" + auction_id)
@@ -291,7 +280,6 @@ def watchlist(request):
 
 @login_required(login_url="/login")
 def bid(request):
-    """Bid view: only POST method allowed, handles bidding logic."""
     if request.method == "POST":
         form = BidForm(request.POST)
         if form.is_valid():
@@ -337,12 +325,12 @@ def bid(request):
             else:
                 return render(request, "auctions/error_handling.html", {
                     "code": 400,
-                    "message": "Youre bid is too small"
+                    "message": "Your bid is too small"
                 })
         else:
             return render(request, "auctions/error_handling.html", {
                 "code": 400,
-                "message": "Form is invalid"
+                "message": "Invalid Form"
             })
     # Method not allowed - GET
     return render(request, "auctions/error_handling.html", {
@@ -354,7 +342,6 @@ def bid(request):
 
 
 def categories(request, category=None):
-    """Categories view: shows all categories and allowes filter auction by category."""
     # Get all categories
     categories_list = Auction.CATEGORY
 
@@ -372,12 +359,12 @@ def categories(request, category=None):
         else:
             return render(request, "auctions/error_handling.html", {
                 "code": 400,
-                "message": "Category is incorrect"
+                "message": "Incorrect Category"
             })
 
     return render(request, "auctions/error_handling.html", {
         "code": 404,
-        "message": "This page doesn not exist"
+        "message": "This page doesn't exist"
     })
 
 
