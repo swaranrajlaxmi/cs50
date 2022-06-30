@@ -28,16 +28,12 @@ function compose_email() {
 function submit_email (event) {
   event.preventDefault();
   //get values from form after submitting email
-  const recipients = document.querySelector('#compose-recipients').value;
-  const subject = document.querySelector('#compose-subject').value;
-  const body = document.querySelector('#compose-body').value;
-
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
-        recipients: recipients,
-        subject: subject,
-        body: body
+        recipients: document.querySelector('#compose-recipients').value,
+        subject: document.querySelector('#compose-subject').value,
+        body: document.querySelector('#compose-body').value
     })
   })
   .then(response => response.json())
