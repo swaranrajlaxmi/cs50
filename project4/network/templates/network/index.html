@@ -1,0 +1,16 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body my-card">
+        Add New Post
+            <textarea class="mt-2 form-control" id="add-text" rows="3"></textarea>
+            <div class="mt-2 d-flex justify-content-end">
+                <button type="button" id="add-btn" class="btn btn-success">Post</button>
+            </div>
+    </div>
+</div>
+{% endblock %}
+  
+{% block script %} <script src="{% static 'network/new_post.js'%}"></script> {% endblock %}
