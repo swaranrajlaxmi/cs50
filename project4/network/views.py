@@ -9,22 +9,30 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.core import serializers
 
 
-from .models import User, Post, Profile, Like
-
-
-from .models import User
+from .models import User, Post
 
 
 def index(request):
-    posts = Post.objects.all().order_by('-timestamp')
+    return render(request, "network/index.html")
 
-    paginator = Paginator(posts, 10) # Show 10 posts per page.
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, "network/index.html", {'page_obj': page_obj})
+def all_posts(request):
+    postsQuerySet = Post.objects.all().order_by('-timestamp')
+    listOfposts = []
+    for p in postsQuerySet.iterator():
+        post = {
+            'id': p.id,
+            'username' : p.user.username,
+            'content' : p.content, 
+            'timestamp' : p.timestamp.strftime("%B %d, %Y, %I:%M %p"),  #eg - June/16/2022  11:05 PM,  
+            'likes' : p.likes.count()
+        }
+        listOfposts.append(post)
 
+    return JsonResponse({"posts": listOfposts})
+    
 @login_required
 @csrf_exempt
 def new_post(request):
@@ -39,14 +47,34 @@ def new_post(request):
             obj.save()
             responseObj = {
                 'post_id': obj.id,
+                'content': obj.content,
                 'username': obj.user.username,
-                'timestamp': obj.timestamp.strftime("%B %d, %Y, %I:%M %p")  #eg - June/16/2022  11:05 PM
+                'timestamp': obj.timestamp.strftime("%B %d, %Y, %I:%M %p"),  #eg - June/16/2022  11:05 PM
+                'likes': 0
             }
             print (responseObj)
             return JsonResponse(responseObj, status=201)
     return JsonResponse({}, status=400)
 
 
+def profile(request, username):
+    
+    current_user = request.user.username
+    target_user = User.objects.get(username=username)
+    targets_profileQuerySet = target_user.follower.all()
+    listOfFollowers = []
+    for f in targets_profileQuerySet.iterator():
+        follower = {
+            'id': f.id,
+            'from_user_id': f.from_user_id,
+            'to_user_id': f.to_user_id
+        }
+        listOfFollowers.append(follower)
+    return render(request, "network/profile.html", {
+        "target_user": target_user,
+        "current_user": current_user
+    })
+    
 
 
 def login_view(request):
