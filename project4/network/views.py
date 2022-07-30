@@ -1,3 +1,4 @@
+from ast import If
 from urllib import response
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -12,7 +13,7 @@ from django.core.paginator import Paginator
 from django.core import serializers
 
 
-from .models import User, Post
+from .models import User, Post, UserFollower
 
 
 def index(request):
@@ -59,21 +60,51 @@ def new_post(request):
 
 def profile(request, username):
     
-    current_user = request.user.username
+    current_user = request.user
     target_user = User.objects.get(username=username)
-    targets_profileQuerySet = target_user.follower.all()
-    listOfFollowers = []
-    for f in targets_profileQuerySet.iterator():
-        follower = {
-            'id': f.id,
-            'from_user_id': f.from_user_id,
-            'to_user_id': f.to_user_id
-        }
-        listOfFollowers.append(follower)
+
+    is_a_follower = UserFollower.objects.filter(follower=current_user, following=target_user).count()
+
+    followings = UserFollower.objects.filter(follower=target_user)
+    followers = UserFollower.objects.filter(following=target_user)
+    
     return render(request, "network/profile.html", {
         "target_user": target_user,
-        "current_user": current_user
+        "current_user": current_user,
+        "followings_count": followings.count(),
+        "followers_count": followers.count(),
+        "is_a_follower": is_a_follower
     })
+
+
+@login_required
+@csrf_exempt
+def follow(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username")
+
+        current_user = request.user
+        target_user = User.objects.get(username=username)
+
+        follower_queryset = UserFollower.objects.filter(follower=current_user, following=target_user)
+        is_a_follower = follower_queryset.count()
+
+        # Unfollow
+        if(is_a_follower != 0):
+            follower_queryset.delete()
+        else:
+        # Folllow user
+            user_follower = UserFollower()
+            user_follower.follower = request.user
+            user_follower.following = target_user
+            user_follower.save()
+
+    followers = UserFollower.objects.filter(following=target_user) 
+        
+    return JsonResponse({
+        "followers_count": followers.count(),
+    }, status=201) 
     
 
 

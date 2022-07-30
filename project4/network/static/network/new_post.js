@@ -2,9 +2,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const addBtn = document.querySelector('#add-btn');
     if (addBtn != null) {
         addBtn.addEventListener("click", createNewPost)
+    }   
+    const followBtn = document.querySelector('#follow-btn');
+    if (followBtn != null) {
+        followBtn.addEventListener("click", follow)
     }
-    
-    //document.querySelector('#add-btn').addEventListener("click", createNewPost)
     // By default, load the allPosts
     allPosts();
 })
@@ -71,6 +73,24 @@ function singlePost(post, direction) {
     }
     else{
         document.querySelector("#allposts").appendChild(postDiv);
-       
     }
+}
+
+
+function follow(){
+    fetch('/follow', {
+        method: 'POST',
+        body: JSON.stringify({
+            username: document.querySelector('#target_user').innerText  
+        })
+    })
+    .then(response => response.json())
+    .then(function(responseJson) {
+        if (document.querySelector('#follow-btn').innerText == 'Follow') {
+            document.querySelector('#follow-btn').innerText = 'Unfollow';
+        } else if (document.querySelector('#follow-btn').innerText = 'Unfollow') {
+            document.querySelector('#follow-btn').innerText = "Follow";
+        }
+        document.querySelector('#followers').innerText = responseJson.followers_count;
+    })
 }

@@ -4,10 +4,10 @@
 {% block body %}
 <div class="card" id="profile_header">
     <div class="card-body">
-      <h5 class="card-title">{{target_user}}</h5>
-      {%if target_user != current_user%}
-        <button type="button" class="btn btn-outline-primary">
-        {% if target_user in users_profile.following.all %}
+      <h5 class="card-title" id="target_user">{{target_user}}</h5>
+      {%if target_user.id != current_user.id %}
+        <button type="button" id="follow-btn" class="btn btn-outline-primary">
+        {% if is_a_follower != 0 %}
           Unfollow
         {% else %}
           Follow
@@ -15,8 +15,8 @@
         </button>
       {% endif %}
         <div class="w-100 d-flex justify-content-end">
-            <span class="text-danger mx-2">Followings {{targets_profile.following.count}}</span>
-            <span class="text-success" id="follower">Followers {{targets_profile.follower.count}}</span>
+            <span class="text-danger mx-2">Followings <span id="followings">{{followings_count}}</span></span>
+            <span class="text-success">Followers <span id="followers">{{followers_count}}</span></span>
         </div>
     </div>
 </div>
