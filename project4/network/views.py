@@ -1,4 +1,4 @@
-from ast import If
+from ast import If, Try
 from urllib import response
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -23,14 +23,23 @@ def all_posts(request):
     postsQuerySet = Post.objects.all().order_by('-timestamp')
     listOfposts = []
     for p in postsQuerySet.iterator():
+        isPostOwner = False
+        isLiked = False
+        if request.user.id is not None:
+            isLiked = p.likes.filter(id = request.user.id).exists()
+            isPostOwner = (p.user.id == request.user.id)
+
         post = {
             'id': p.id,
             'username' : p.user.username,
             'content' : p.content, 
             'timestamp' : p.timestamp.strftime("%B %d, %Y, %I:%M %p"),  #eg - June/16/2022  11:05 PM,  
-            'likes' : p.likes.count()
+            'likes' : p.likes.count(),
+            'isLiked': isLiked,
+            'isPostOwner': isPostOwner
         }
         listOfposts.append(post)
+    
 
     return JsonResponse({"posts": listOfposts})
     
@@ -47,11 +56,13 @@ def new_post(request):
             obj.user = request.user
             obj.save()
             responseObj = {
-                'post_id': obj.id,
+                'id': obj.id,
                 'content': obj.content,
                 'username': obj.user.username,
                 'timestamp': obj.timestamp.strftime("%B %d, %Y, %I:%M %p"),  #eg - June/16/2022  11:05 PM
-                'likes': 0
+                'likes': 0,
+                'isLiked': False,
+                'isPostOwner': True
             }
             print (responseObj)
             return JsonResponse(responseObj, status=201)
@@ -105,6 +116,34 @@ def follow(request):
     return JsonResponse({
         "followers_count": followers.count(),
     }, status=201) 
+
+
+@login_required
+@csrf_exempt
+def like(request):
+    data = json.loads(request.body)
+    post_id = data.get("postId")
+    try:
+        post = Post.objects.get(id = post_id)
+    except Exception:
+        return JsonResponse({
+            "message": "post not found."
+        }, status=404)
+
+    current_like_status = post.likes.filter(id = request.user.id).exists()   
+    #dislike
+    if current_like_status == True:
+        post.likes.remove(request.user)
+    #like
+    else:
+        post.likes.add(request.user)
+    
+    likes = post.likes.count()
+
+    return JsonResponse( {
+        "current_like_status": not current_like_status,
+        "likes": likes
+        }, status=201)
     
 
 

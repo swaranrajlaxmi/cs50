@@ -1,0 +1,14 @@
+svg path {
+    fill: white;
+    border: 1pt solid;
+}
+
+.heart-icon-gray {
+    color: gray;
+}
+
+.heart-icon-red {
+    color:red;
+}
+
+
