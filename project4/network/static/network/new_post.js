@@ -53,36 +53,68 @@ function like() {
     })
     .then(response => response.json())
     .then(function(responseJson) {
-        console.log("result",responseJson);
-
-        likeBtn.querySelector("i").classList.toggle("heart-icon-gray");
-        likeBtn.querySelector("i").classList.toggle("heart-icon-red");
+        likeBtn.querySelector("i").classList.toggle("text-secondary");
+        likeBtn.querySelector("i").classList.toggle("text-danger");
         likeBtn.parentElement.querySelector(".like-count-span").innerText = responseJson.likes
     })
 }
 
+
+function edit(){
+    const editBtn = this.event.currentTarget;
+    const postCardDiv = editBtn.closest(".post-card");
+    postCardDiv.classList.toggle("post-card-edit");
+}
+
+function saveEditedPost(){
+    const saveBtn = this.event.currentTarget;
+    const postCardDiv = saveBtn.closest(".post-card");
+    const content = postCardDiv.querySelector('textarea').value;
+    fetch('/save_edited_post', {
+        method: 'POST',
+        body: JSON.stringify({
+            content: content,
+            postId: saveBtn.dataset.postid 
+        })
+    })
+    .then(response => response.json())
+    .then(function(responseJson) {
+        postCardDiv.classList.toggle("post-card-edit");
+        postCardDiv.querySelector(".content-section .content-p").innerText = content
+    })
+}
+
+
 function singlePost(post, direction) {
 
     const postHtml = `
-    <div class="card">
+    <div class="card post-card ">
         <div class="card-header" >
             <div class="d-flex mb-2">
                 <div class="d-flex justify-content-start">
                     <a href="/profile/${post.username}" class="card-link">${ post.username }</a>
                 </div>
                 <div class="w-100 d-flex justify-content-end">
-                    <button class="btn btn-link">Edit</button>
+                    <button class="btn btn-link edit-btn ${post.isPostOwner == false ? 'd-none': ''}" onclick="edit()">Edit</button>
                 </div>
             </div>
         </div>
         <div class="card-body">
-        <p class="card-text">${post.content}</p>
-        <div class="like-section">
-            <button class="btn btn-link" name="like" data-postid="${ post.id }" onclick="like()">
-                <i class="bi bi-heart-fill ${post.isLiked == false ? 'heart-icon-gray': 'heart-icon-red'}"></i>
-            </button>
-            <span class="like-count-span">${post.likes}</span> likes
-        </div>
+            <div class="content-section">
+                <p class="card-text content-p">${post.content}</p>
+            </div>
+            <div class="textarea-section">
+                <textarea class="mt-2 form-control " rows="3">${post.content}</textarea>
+                <div class="mt-2 d-flex justify-content-end">
+                    <button type="button" class="btn btn-success" data-postid="${ post.id }" onclick="saveEditedPost()">Save</button>
+                </div>
+            </div>
+            <div class="like-section">
+                <button class="btn btn-link" name="like" data-postid="${ post.id }" onclick="like()">
+                    <i class="bi bi-heart-fill ${post.isLiked == false ? 'text-secondary': 'text-danger'}"></i>
+                </button>
+                <span class="like-count-span">${post.likes}</span> likes
+            </div>
         </div>
         <div class="card-footer text-muted">
             <div class="text-right">${post.timestamp}</div>

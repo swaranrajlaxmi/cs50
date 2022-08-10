@@ -49,10 +49,10 @@ def new_post(request):
     # Composing a new post must be via POST
     if request.method == "POST":
         data = json.loads(request.body)
-        post = data.get("content")
-        if len(post) != 0:
+        content = data.get("content")
+        if len(content) != 0:
             obj = Post()
-            obj.content = post
+            obj.content = content
             obj.user = request.user
             obj.save()
             responseObj = {
@@ -66,7 +66,7 @@ def new_post(request):
             }
             print (responseObj)
             return JsonResponse(responseObj, status=201)
-    return JsonResponse({}, status=400)
+    return JsonResponse({}, status=404)
 
 
 def profile(request, username):
@@ -111,39 +111,66 @@ def follow(request):
             user_follower.following = target_user
             user_follower.save()
 
-    followers = UserFollower.objects.filter(following=target_user) 
-        
-    return JsonResponse({
-        "followers_count": followers.count(),
-    }, status=201) 
+        followers = UserFollower.objects.filter(following=target_user) 
+            
+        return JsonResponse({
+            "followers_count": followers.count(),
+        }, status=201) 
 
 
 @login_required
 @csrf_exempt
 def like(request):
-    data = json.loads(request.body)
-    post_id = data.get("postId")
-    try:
-        post = Post.objects.get(id = post_id)
-    except Exception:
-        return JsonResponse({
-            "message": "post not found."
-        }, status=404)
+    if request.method == "POST":
+        data = json.loads(request.body)
+        post_id = data.get("postId")
+        try:
+            post = Post.objects.get(id = post_id)
+        except Exception:
+            return JsonResponse({
+                "message": "post not found."
+            }, status=404)
 
-    current_like_status = post.likes.filter(id = request.user.id).exists()   
-    #dislike
-    if current_like_status == True:
-        post.likes.remove(request.user)
-    #like
-    else:
-        post.likes.add(request.user)
-    
-    likes = post.likes.count()
+        current_like_status = post.likes.filter(id = request.user.id).exists()   
+        #dislike
+        if current_like_status == True:
+            post.likes.remove(request.user)
+        #like
+        else:
+            post.likes.add(request.user)
+        
+        likes = post.likes.count()
 
-    return JsonResponse( {
-        "current_like_status": not current_like_status,
-        "likes": likes
-        }, status=201)
+        return JsonResponse( {
+            "current_like_status": not current_like_status,
+            "likes": likes
+            }, status=201)
+
+
+@login_required
+@csrf_exempt
+def save_edited_post(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        content = data.get("content")
+        post_id = data.get("postId")
+
+        try:
+            post = Post.objects.get(id = post_id)
+        except Exception:
+            return JsonResponse({
+                "message": "post not found."
+            }, status=404)
+
+        if request.user.id is not None:
+            isPostOwner = (post.user.id == request.user.id)
+
+            if len(content) != 0:
+                post.content = content
+                post.save()
+                return JsonResponse({},status=200)
+            else:
+                return JsonResponse({"message": "Insufficient post length"},status=400)#400 - bad request 
     
 
 

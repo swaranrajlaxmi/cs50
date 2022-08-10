@@ -1,14 +1,25 @@
-svg path {
-    fill: white;
-    border: 1pt solid;
+/* Non-edit mode */
+.post-card .edit-btn {
+    display: block;
 }
 
-.heart-icon-gray {
-    color: gray;
+.post-card .content-section {
+    display: block;
 }
 
-.heart-icon-red {
-    color:red;
+.post-card .textarea-section{
+    display: none;
 }
 
+/* Edit mode */
+.post-card-edit .edit-btn {
+        display: none;
+}
 
+.post-card-edit .content-section {
+    display: none;
+}
+
+.post-card-edit .textarea-section{
+    display: block;
+}
