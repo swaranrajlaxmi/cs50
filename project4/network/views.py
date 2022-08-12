@@ -20,7 +20,15 @@ def index(request):
     return render(request, "network/index.html")
 
 def all_posts(request):
-    postsQuerySet = Post.objects.all().order_by('-timestamp')
+    if(request.GET.get("following") == 'true'):
+        following_to_users = UserFollower.objects.filter(follower = request.user)
+        listOfFollowing = []
+        for f in following_to_users:
+            following = f.following.id
+            listOfFollowing.append(following)
+        postsQuerySet = Post.objects.filter(user__in=listOfFollowing)             
+    else:
+        postsQuerySet = Post.objects.all().order_by('-timestamp')
     listOfposts = []
     for p in postsQuerySet.iterator():
         isPostOwner = False
@@ -86,6 +94,12 @@ def profile(request, username):
         "followers_count": followers.count(),
         "is_a_follower": is_a_follower
     })
+
+@login_required
+@csrf_exempt
+def following(request):
+    return render(request, "network/following.html")
+
 
 
 @login_required

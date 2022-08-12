@@ -28,11 +28,20 @@ function createNewPost() {
 }
 
 function allPosts() {
-    fetch('/posts') 
-    .then(response => response.json())
+    let postHttp;
+    if (location.pathname === '/following') {
+        postHttp = fetch('/posts?following=true')
+    } else {
+        postHttp = fetch('/posts')
+    }
+
+    postHttp
+    .then(response => {
+        return response.json()
+    })
     .then(res => {
     
-        console.log(res.posts);
+        console.log("in then",res.posts);
         for (let i = 0; i < res.posts.length; i++) {
             // take values from posts
             singlePost(res.posts[i], 'after');
