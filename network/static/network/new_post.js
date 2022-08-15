@@ -71,12 +71,14 @@ function allPosts() {
     .then(res => {
         let parentElement = document.getElementById('allposts')
         parentElement.innerHTML = "";
-        console.log("in then",res.posts);
+
         for (let i = 0; i < res.posts.length; i++) {
             // take values from posts
             singlePost(res.posts[i], 'after');
         }
         numPages = res.totalPages
+        document.querySelector("#current_page").innerText = currentPage;
+        document.querySelector("#num_pages").innerText = numPages;
         
     });
 }
@@ -131,7 +133,7 @@ function singlePost(post, direction) {
         <div class="card-header" >
             <div class="d-flex mb-2">
                 <div class="d-flex justify-content-start">
-                    <a href="/profile/${post.username}" class="card-link">${ post.username }</a>
+                    <a href="/profile/${post.username}" class="card-link username">${ post.username }</a>
                 </div>
                 <div class="w-100 d-flex justify-content-end">
                     <button class="btn btn-link edit-btn ${post.isPostOwner == false ? 'd-none': ''}" onclick="edit()">Edit</button>
@@ -153,10 +155,8 @@ function singlePost(post, direction) {
                     <i class="bi bi-heart-fill ${post.isLiked == false ? 'text-secondary': 'text-danger'}"></i>
                 </button>
                 <span class="like-count-span">${post.likes}</span> likes
+                <span class="float-right text-muted">${post.timestamp}</span>
             </div>
-        </div>
-        <div class="card-footer text-muted">
-            <div class="text-right">${post.timestamp}</div>
         </div>
     </div>
     `
@@ -171,6 +171,7 @@ function singlePost(post, direction) {
     else{
         document.querySelector("#allposts").appendChild(postDiv);
     }
+    
 }
 
 

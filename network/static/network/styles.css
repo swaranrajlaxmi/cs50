@@ -23,3 +23,17 @@
 .post-card-edit .textarea-section{
     display: block;
 }
+
+a {
+    font-weight: 600;
+    font-size: 17px;
+    color: #1d2124;
+}
+
+.username {
+    text-transform: capitalize;
+  }
+
+.post-card {
+    margin: 18px;
+  }

@@ -197,7 +197,7 @@ def save_edited_post(request):
         if request.user.id is not None:
             isPostOwner = (post.user.id == request.user.id)
 
-            if len(content) != 0:
+            if len(content) != 0 and isPostOwner == True:
                 post.content = content
                 post.save()
                 return JsonResponse({},status=200)

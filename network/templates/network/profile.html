@@ -4,7 +4,7 @@
 {% block body %}
 <div class="card" id="profile_header">
     <div class="card-body">
-      <h5 class="card-title" id="target_user">{{target_user}}</h5>
+      <h5 class="card-title username" id="target_user">{{target_user}}</h5>
       {%if target_user.id != current_user.id %}
         <button type="button" id="follow-btn" class="btn btn-outline-primary">
         {% if is_a_follower != 0 %}
