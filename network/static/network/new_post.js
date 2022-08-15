@@ -1,3 +1,6 @@
+let currentPage = 1;
+let numPages = 0;
+
 document.addEventListener('DOMContentLoaded', function() {
     const addBtn = document.querySelector('#add-btn');
     if (addBtn != null) {
@@ -7,10 +10,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (followBtn != null) {
         followBtn.addEventListener("click", follow)
     }
+    const previousBtn = document.querySelector('.previous-btn');
+    if (previousBtn != null) {
+        previousBtn.addEventListener("click", previousPage)
+    }
+    const nextBtn = document.querySelector('.next-btn');
+    if (nextBtn != null) {
+        nextBtn.addEventListener("click", nextPage)
+    }
     
     // By default, load the allPosts
     allPosts();
 })
+
+function previousPage() {
+    if (currentPage > 1) { // 10....2
+        currentPage--; // 9, 1
+        allPosts(); // 9, 1
+    }
+}
+
+function nextPage() {
+    if (currentPage < numPages) {//8.9.10
+        currentPage++;//9.10
+        allPosts();//9.10
+    }
+}
 
 function createNewPost() {
     fetch('/create_post', {
@@ -23,16 +48,20 @@ function createNewPost() {
     .then(function(responseJson) {
         
         document.querySelector('#add-text').value = "";
-        singlePost(responseJson, 'before');
+        currentPage = 1;
+        allPosts()
     })
 }
 
 function allPosts() {
     let postHttp;
     if (location.pathname === '/following') {
-        postHttp = fetch('/posts?following=true')
+        postHttp = fetch(`/posts?following=true&page=${currentPage}`)
+    } else if (location.pathname.includes("/profile")) {
+        urlSplit = location.pathname.split("/")
+        postHttp = fetch(`/posts?profile=${urlSplit[2]}&page=${currentPage}`)
     } else {
-        postHttp = fetch('/posts')
+        postHttp = fetch(`/posts?page=${currentPage}`)
     }
 
     postHttp
@@ -40,14 +69,15 @@ function allPosts() {
         return response.json()
     })
     .then(res => {
-    
+        let parentElement = document.getElementById('allposts')
+        parentElement.innerHTML = "";
         console.log("in then",res.posts);
         for (let i = 0; i < res.posts.length; i++) {
             // take values from posts
             singlePost(res.posts[i], 'after');
-
         }
-
+        numPages = res.totalPages
+        
     });
 }
 

@@ -1,6 +1,8 @@
 from ast import If, Try
+from http.client import FORBIDDEN
 from urllib import response
 import json
+from django import http
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,16 +23,32 @@ def index(request):
 
 def all_posts(request):
     if(request.GET.get("following") == 'true'):
-        following_to_users = UserFollower.objects.filter(follower = request.user)
-        listOfFollowing = []
-        for f in following_to_users:
-            following = f.following.id
-            listOfFollowing.append(following)
-        postsQuerySet = Post.objects.filter(user__in=listOfFollowing)             
+        if request.user.id is not None:
+            following_to_users = UserFollower.objects.filter(follower = request.user)
+            listOfFollowing = []
+            for f in following_to_users:
+                following = f.following.id
+                listOfFollowing.append(following)
+            postsQuerySet = Post.objects.filter(user__in=listOfFollowing).order_by('-timestamp')
+        else: JsonResponse({}, status=403)             
+    
+    elif(request.GET.get("profile") != None):
+        t_user = request.GET.get("profile")
+        target_user = User.objects.filter(username=t_user)
+        if (target_user.exists()):
+            postsQuerySet = Post.objects.filter(user=target_user.first()).order_by('-timestamp')
+
+        else: JsonResponse({}, status=404)
+
     else:
         postsQuerySet = Post.objects.all().order_by('-timestamp')
+
+    paginator = Paginator(postsQuerySet, 10) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     listOfposts = []
-    for p in postsQuerySet.iterator():
+    for p in page_obj:
         isPostOwner = False
         isLiked = False
         if request.user.id is not None:
@@ -49,7 +67,7 @@ def all_posts(request):
         listOfposts.append(post)
     
 
-    return JsonResponse({"posts": listOfposts})
+    return JsonResponse({"posts": listOfposts, 'totalPages': paginator.num_pages })
     
 @login_required
 @csrf_exempt
