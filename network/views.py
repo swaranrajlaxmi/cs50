@@ -200,7 +200,9 @@ def save_edited_post(request):
             if len(content) != 0 and isPostOwner == True:
                 post.content = content
                 post.save()
-                return JsonResponse({},status=200)
+                return JsonResponse({
+                    'timestamp': post.timestamp.strftime("%B %d, %Y, %I:%M %p"),  #eg - June/16/2022  11:05 PM
+                },status=200)
             else:
                 return JsonResponse({"message": "Insufficient post length"},status=400)#400 - bad request 
     

@@ -122,6 +122,7 @@ function saveEditedPost(){
     .then(function(responseJson) {
         postCardDiv.classList.toggle("post-card-edit");
         postCardDiv.querySelector(".content-section .content-p").innerText = content
+        postCardDiv.querySelector(".post-time").innerText = responseJson.timestamp
     })
 }
 
@@ -155,7 +156,7 @@ function singlePost(post, direction) {
                     <i class="bi bi-heart-fill ${post.isLiked == false ? 'text-secondary': 'text-danger'}"></i>
                 </button>
                 <span class="like-count-span">${post.likes}</span> likes
-                <span class="float-right text-muted">${post.timestamp}</span>
+                <span class="float-right text-muted post-time">${post.timestamp}</span>
             </div>
         </div>
     </div>
