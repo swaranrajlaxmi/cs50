@@ -1,0 +1,35 @@
+/* Non-edit mode */
+.post-card .edit-btn {
+    display: block;
+}
+
+.post-card .content-section {
+    display: block;
+}
+
+.post-card .textarea-section{
+    display: none;
+}
+
+/* Edit mode */
+.post-card-edit .edit-btn {
+        display: none;
+}
+
+.post-card-edit .content-section {
+    display: none;
+}
+
+.post-card-edit .textarea-section{
+    display: block;
+}
+
+a {
+    font-weight: 600;
+    font-size: 17px;
+    color: #1d2124;
+}
+
+.post-card {
+    margin: 18px;
+  }

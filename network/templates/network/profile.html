@@ -1,0 +1,25 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="card" id="profile_header">
+    <div class="card-body">
+      <h3 class="card-title username" id="target_user">{{target_user}}</h3>
+      {%if target_user.id != current_user.id %}
+        <button type="button" id="follow-btn" class="btn btn-outline-primary">
+        {% if is_a_follower != 0 %}
+          Unfollow
+        {% else %}
+          Follow
+        {% endif %}
+        </button>
+      {% endif %}
+        <div class="w-100 d-flex justify-content-end">
+            <span class="text-danger mx-2">Followings <span id="followings">{{followings_count}}</span></span>
+            <span class="text-success">Followers <span id="followers">{{followers_count}}</span></span>
+        </div>
+    </div>
+</div>
+{% include "network/allpost.html" %}
+
+{% endblock %}
