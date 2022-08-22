@@ -14,10 +14,11 @@ from django.db import IntegrityError
 from .models import User, Auction, Bid, Comment, Watchlist
 
 
-"""forms"""
-
 class CreateListingForm(forms.ModelForm):
-    """Aucton model form"""
+    class Meta:
+        model = Auction
+        fields = ["title", "description", "category", "image_url"]
+
     title = forms.CharField(label="Title", max_length=64, required=True, widget=forms.TextInput(attrs={
         "autocomplte": "off", "aria-label": "title", "class": "form-control"
     }))
@@ -34,14 +35,8 @@ class CreateListingForm(forms.ModelForm):
         "type":"number", "step": "0.01", "class": "form-control"
     }))
 
-    class Meta:
-        model = Auction
-        fields = ["title", "description", "category", "image_url"]
-
-
 
 class BidForm(forms.ModelForm):
-    """Bid model form"""
     class Meta:
         model = Bid
         fields = ["bid_price"]
@@ -52,7 +47,7 @@ class BidForm(forms.ModelForm):
             "bid_price": forms.NumberInput(attrs={
                 "placeholder": "Bid",
                 "min": 0.01,
-                "max": 100000000000,
+                "max": 100000000,
                 "class": "form-control"
             })
         }
@@ -68,16 +63,13 @@ class CommentForm(forms.ModelForm):
         }
         widgets = {
             "comment": forms.Textarea(attrs={
-                "placeholder": "Comment here",
+                "placeholder": "Comment",
                 "class": "form-control",
-                "rows": 1
+                "rows": 2
             })
         }
 
-"""views"""
-
 def index(request):
-    """get all auctions in descending"""
     auctions = Auction.objects.filter(closed=False).order_by("publication_date")
     return render(request, "auctions/index.html", {
         "auctions": auctions
@@ -87,7 +79,7 @@ def index(request):
 
 
 @login_required(login_url="auctions:login")
-def user_panel(request):
+def profile(request):
     """User Panel view: shows all auctions that user: selling, sold, bidding, won."""
    
     all_distinct_bids =  Bid.objects.filter(user=request.user.id).values_list("auction", flat=True).distinct()
@@ -101,7 +93,7 @@ def user_panel(request):
         if highest_bid.user.id == request.user.id:
             won.append(auction)
 
-    return render(request, "auctions/user_panel.html", {
+    return render(request, "auctions/profile.html", {
         "selling": selling,
         "sold": sold,
         "bidding": bidding,

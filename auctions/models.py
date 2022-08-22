@@ -7,9 +7,6 @@ class User(AbstractUser):
     pass
 
 class Auction(models.Model):
-    """Auction model contain all fields about one auction like 
-    title, description, image, current_price, category, seller, publication_date, closed """
-    # Categories - choices
     AUDIO = 'AO'
     BOOKS = 'BK'
     MENS_FASHION = 'MF'
@@ -34,8 +31,6 @@ class Auction(models.Model):
         (TOYS, "Toys"),
     ]
 
-    # Model fields
-    # auto: auction_id
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=64, blank=False)
     description = models.CharField(max_length=300, blank=True)
@@ -54,11 +49,6 @@ class Auction(models.Model):
 
 
 class Bid(models.Model):
-    """Bid model contains all fields about single bid: 
-    like bid_price, bid_date, user who bid and auction on which user bid"""
-
-    # Model fields
-    # auto: bid_id
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_date = models.DateTimeField(auto_now_add=True)
@@ -73,11 +63,6 @@ class Bid(models.Model):
 
 
 class Comment(models.Model):
-    """Comment model contains all fields about single comment:
-    like comment content, comment_date, on what auction and user who comment"""
-
-    # Model fields
-    # auto: comment_id
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.TextField(blank=False)
@@ -93,11 +78,6 @@ class Comment(models.Model):
 
 
 class Watchlist(models.Model):
-    """Watchlist model contains all fields about item on watchlist:
-    like which auction and whose watchlist"""
-
-    # Model field
-    # auto: watchlist_id
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist")
 
