@@ -4,6 +4,18 @@
     --white-color: #f0f4fc;
 }
 
+.navbar-light .navbar-nav .nav-link {
+    color: black;
+}
+
+.nav_list a {
+    margin-left: 20pt;
+}
+
+.nav_list {
+    text-align: center
+}
+
 
 body {
     padding: 10px;
@@ -46,21 +58,6 @@ body {
 }
 
 /* ^^^^ Listing page ^^^^ */
-
-/* auction img */
-.listing-page-img-wrapper {
-    text-align: center;
-}
-
-.listing-page-img {
-    max-width: 500px;
-}
-
-/* mian button */
-.listing-page-main-btn {
-    float: right;
-}
-
 /* auction title */
 .auction-title {
     text-align: center;
@@ -69,6 +66,20 @@ body {
 
 .auction-title h2 {
     font-size: 2rem;
+}
+
+/* main button */
+.listing-page-main-btn {
+    float: right;
+}
+
+/* auction img */
+.listing-page-img-wrapper {
+    text-align: center;
+}
+
+.listing-page-img {
+    max-width: 500px;
 }
 
 
@@ -172,3 +183,33 @@ div.error-message {
 .nav_list {
     text-align: center
 }
+
+/* auction comments and detail */
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: .8rem;
+}
+
+.single-comment{
+    list-style-type: none;
+    border-left: 10px solid var(--first-blue);
+    border-radius: 10px;
+    background-color:  var(--white-color);
+    padding: 15px;
+}
+
+.comment-text {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-bottom: 15px;
+}
+
+.comment-author {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.92em;
+    margin-bottom: 3px;
+}
+
+/* ^^^^^^^^^^^^^^^^^^^^^^ */

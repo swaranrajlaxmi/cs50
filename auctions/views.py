@@ -54,7 +54,6 @@ class BidForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
-    """Comment model form"""
     class Meta:
         model = Comment
         fields = ["comment"]
@@ -78,26 +77,27 @@ def index(request):
 
 
 
-@login_required(login_url="auctions:login")
+@login_required
 def profile(request):
-    """User Panel view: shows all auctions that user: selling, sold, bidding, won."""
-   
-    all_distinct_bids =  Bid.objects.filter(user=request.user.id).values_list("auction", flat=True).distinct()
-    won = []
-    selling = Auction.objects.filter(closed=False, seller=request.user.id).order_by("-publication_date").all()
-    sold = Auction.objects.filter(closed=True, seller=request.user.id).order_by("-publication_date").all()
-    bidding = Auction.objects.filter(closed=False, id__in = all_distinct_bids).all()
-    for auction in Auction.objects.filter(closed=True, id__in = all_distinct_bids).all():
+    user =  Bid.objects.filter(user=request.user.id)
+    bids = user.values_list("auction", flat=True).distinct()
+    auctions = Auction.objects.filter(closed=True, id__in = bids).all()
+    won_items = []
+    for auction in auctions:
         highest_bid = Bid.objects.filter(auction=auction.id).order_by('-bid_price').first()
-
+        
         if highest_bid.user.id == request.user.id:
-            won.append(auction)
+            won_items.append(auction)
+
+    selling_items = Auction.objects.filter(closed=False, seller=request.user.id).order_by("-publication_date").all()
+    sold_items = Auction.objects.filter(closed=True, seller=request.user.id).order_by("-publication_date").all()
+    bidding_items = Auction.objects.filter(closed=False, id__in = bids).all()
 
     return render(request, "auctions/profile.html", {
-        "selling": selling,
-        "sold": sold,
-        "bidding": bidding,
-        "won": won
+        "selling": selling_items,
+        "sold": sold_items,
+        "bidding": bidding_items,
+        "won": won_items
     })
 
 
@@ -105,23 +105,21 @@ def profile(request):
 
 
 
-@login_required(login_url="/login")
+@login_required
 def create_listing(request):
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = CreateListingForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # Get all data from the form
-            title = form.cleaned_data["title"]
-            description = form.cleaned_data["description"]
-            category = form.cleaned_data["category"]
-            image_url = form.cleaned_data["image_url"]
-            current_price = form.cleaned_data["current_price"]
+        create_listing_form = CreateListingForm(request.POST)
+        seller = User.objects.get(pk=request.user.id)
 
-            # Save a record
+        if create_listing_form.is_valid():
+            title = create_listing_form.cleaned_data["title"]
+            description = create_listing_form.cleaned_data["description"]
+            category = create_listing_form.cleaned_data["category"]
+            image_url = create_listing_form.cleaned_data["image_url"]
+            current_price = create_listing_form.cleaned_data["current_price"]
+        
             auction = Auction(
-                seller = User.objects.get(pk=request.user.id),
+                seller = seller,
                 title = title,
                 description = description,
                 category = category,
@@ -129,138 +127,108 @@ def create_listing(request):
                 current_price = current_price
             )
             auction.save()
-            # redirect to a new URL:
             return HttpResponseRedirect(reverse("auctions:index"))
 
         else:
             return render(request, "auctions/create_listing.html", {
-                "form": form
+                "form": create_listing_form
             }) 
 
-    # if a GET (or any other method) we'll create a blank form
     return render(request, "auctions/create_listing.html", {
         "form": CreateListingForm()
     })
 
 
 def listing_page(request, auction_id):
-    """Listing Page view: shows detailed page of a single auction."""
-    # Get current auction if exists
-    try:
-        auction = Auction.objects.get(pk=auction_id)
-    except Auction.DoesNotExist:
-        return render(request, "auctions/error_handling.html", {
-            "code": 404,
-            "message": "Invalid auction id"
-        })
+    if request.method == 'GET':
 
-    # Get info about bids
-    bid_amount = Bid.objects.filter(auction=auction_id).count()
-    highest_bid = Bid.objects.filter(auction=auction_id).order_by('-bid_price').first()
+        try:
+            auction = Auction.objects.get(pk=auction_id)
+        except Auction.DoesNotExist:
+            return render(request, "auctions/error_handling.html", {
+                "status_code": 404,
+                "message": "Invalid auction id"
+            })
+        bid = Bid.objects.filter(auction=auction_id)    
+        high_bid = bid.order_by('-bid_price').first()
 
-    # Show auction only to the winner and the seller if closed
-    if auction.closed:
-        if highest_bid is not None:
-            winner = highest_bid.user
+        if auction.closed:
+            if high_bid is not None:
+                winner = high_bid.user
 
-            # view is different for winner, seller and other users
-            if request.user.id == auction.seller.id:
-                return render(request, "auctions/sold.html", {
-                    "auction": auction,
-                    "winner": winner
-                })
-            elif request.user.id == winner.id:
-                return render(request, "auctions/bought.html", {
-                    "auction": auction
-                })
+                if request.user.id == auction.seller.id:
+                    return render(request, "auctions/sold.html", {
+                        "auction": auction,
+                        "winner": winner
+                    })
+                elif request.user.id == winner.id:
+                    return render(request, "auctions/bought.html", {
+                        "auction": auction
+                    })
+            else:
+                if request.user.id == auction.seller.id:
+                    return render(request, "auctions/closed_without_sold.html", {
+                        "auction": auction
+                    })
+            return HttpResponse("auction no more available")
         else:
-            if request.user.id == auction.seller.id:
-                return render(request, "auctions/closed_no_offer.html", {
-                    "auction": auction
-                })
+            if request.user.is_authenticated:
+                comments = Comment.objects.filter(auction=auction_id)
+                watchlist_item = Watchlist.objects.filter(auction = auction_id,user = User.objects.get(id=request.user.id)).first()
+                if watchlist_item is not None:
+                    isOn_watchlist = True
+                else:
+                    isOn_watchlist = False
+            else:
+                isOn_watchlist = False
 
-        return HttpResponse("Error - auction no longer available")
+            if high_bid is not None:
+                if high_bid.user == request.user.id:
+                    bid_message = "Your bid is the highest bid"
+                else:
+                    bid_message = "Highest bid made by " + high_bid.user.username
+            else:
+                bid_message = None
+
+            return render(request, "auctions/listing_page.html", {
+                "bid_message": bid_message,
+                "isOn_watchlist": isOn_watchlist,
+                "comments": comments,
+                "bid_form": BidForm(),
+                "comment_form": CommentForm(),
+                "auction": auction,
+                "bid_amount": bid.count(),
+            })
     else:
-         # If user logged in, check if auction already in watchlist
-        if request.user.is_authenticated:
-            watchlist_item = Watchlist.objects.filter(
-                    auction = auction_id,
-                    user = User.objects.get(id=request.user.id)
-            ).first()
-
-            if watchlist_item is not None:
-                on_watchlist = True
-            else:
-                on_watchlist = False
-        else:
-            on_watchlist = False
-
-        # Get all the comments
-        comments = Comment.objects.filter(auction=auction_id)
-
-        # Check who has made the highest bid
-        if highest_bid is not None:
-            if highest_bid.user == request.user.id:
-                bid_message = "Your bid is the highest bid"
-            else:
-                bid_message = "Highest bid made by " + highest_bid.user.username
-        else:
-            bid_message = None
-
-        return render(request, "auctions/listing_page.html", {
-            "auction": auction,
-            "bid_amount": bid_amount,
-            "bid_message": bid_message,
-            "on_watchlist": on_watchlist,
-            "comments": comments,
-            "bid_form": BidForm(),
-            "comment_form": CommentForm()
-        })
+        return render(request, "auctions/login.html")  
 
 
 
-@login_required(login_url="/login")
+@login_required
 def watchlist(request):
-    # Save info about the auction and go back to auction's page
     if request.method == "POST":
-        # Info about the auction
         auction_id = request.POST.get("auction_id")
-
-        # Make sure that auction exists
         try:
             auction = Auction.objects.get(pk=auction_id)
             user = User.objects.get(id=request.user.id)
         except Auction.DoesNotExist:
             return render(request, "auctions/error_handling.html", {
-                "code": 404,
+                "status_code": 404,
                 "message": "Invalid auction id"
             })
-
-        # Add/delete from watchlist logic
-        if request.POST.get("on_watchlist") == "True":
-            # Delete it from watchlist model
-            watchlist_item_to_delete = Watchlist.objects.filter(
-                user = user,
-                auction = auction
-            )
-            watchlist_item_to_delete.delete()
+        if request.POST.get("isOn_watchlist") == "True":
+            watchlist_item = Watchlist.objects.filter(user = user,auction = auction)
+            watchlist_item.delete()
         else:
-            # Save it to watchlist model
             try:
-                watchlist_item = Watchlist(
-                    user = user,
-                    auction = auction
-                )
+                watchlist_item = Watchlist(user = user,auction = auction)
                 watchlist_item.save()
-            # Make sure it is not duplicated for current user
             except IntegrityError:
                 return render(request, "auctions/error_handling.html", {
-                    "code": 400,
+                    "status_code": 400,
                     "message": "Already on your watchlist"
                 })
-
         return HttpResponseRedirect("/" + auction_id)
-
 
     watchlist_auctions_ids = User.objects.get(id=request.user.id).watchlist.values_list("auction")
     watchlist_items = Auction.objects.filter(id__in=watchlist_auctions_ids, closed=False)
@@ -270,167 +238,112 @@ def watchlist(request):
     })
 
 
-@login_required(login_url="/login")
+@login_required
 def bid(request):
     if request.method == "POST":
-        form = BidForm(request.POST)
-        if form.is_valid():
-            bid_price = float(form.cleaned_data["bid_price"])
+        bid_form = BidForm(request.POST)
+        if bid_form.is_valid():
+            bid_price = bid_form.cleaned_data["bid_price"]
             auction_id = request.POST.get("auction_id")
+            auction = Auction.objects.filter(pk=auction_id).first()
+            user = User.objects.filter(id=request.user.id).first()
 
-            # Make sure that bid_price is positive
-            if bid_price <= 0:
-                return render(request, "auctions/error_handling.html", {
-                    "code": 400,
-                    "message": "Bid price must be greater than 0"
-                })
-
-            # # Make sure that auction exists
-            try:
-                auction = Auction.objects.get(pk=auction_id)
-                user = User.objects.get(id=request.user.id)
-            except Auction.DoesNotExist:
-                return render(request, "auctions/error_handling.html", {
-                    "code": 404,
-                    "message": "Auction id doesn't exist"
-                })
-
-            # Make sure that bid is not made by the seller
             if auction.seller == user:
                 return render(request, "auctions/error_handling.html", {
-                    "code": 400,
-                    "message": "Seller cannot bid"
+                    "status_code": 400,
+                    "message": "Seller is not able to bid"
                 })
 
-            # Check if current bid is the highest / else save new bid
-            highest_bid = Bid.objects.filter(auction=auction).order_by('-bid_price').first()
-            if highest_bid is None or bid_price > highest_bid.bid_price:
-                # Add new bid to db
+            if bid_price <= 0:
+                return render(request, "auctions/error_handling.html", {
+                    "status_code": 400,
+                    "message": "Please enter bid price greater than 0"
+                })
+
+            high_bid = Bid.objects.filter(auction=auction).order_by('-bid_price').first()
+            if high_bid is None or bid_price > high_bid.bid_price:
                 new_bid = Bid(auction=auction, user=user, bid_price=bid_price)
                 new_bid.save()
 
-                # Update current highest price
                 auction.current_price = bid_price
                 auction.save()
 
                 return HttpResponseRedirect("/" + auction_id)
             else:
                 return render(request, "auctions/error_handling.html", {
-                    "code": 400,
-                    "message": "Your bid is too small"
+                    "status_code": 400,
+                    "message": "Your bid is too small for this auction"
                 })
         else:
             return render(request, "auctions/error_handling.html", {
-                "code": 400,
+                "status_code": 400,
                 "message": "Invalid Form"
             })
-    # Method not allowed - GET
+
     return render(request, "auctions/error_handling.html", {
-        "code": 405,
+        "status_code": 405,
         "message": "Method Not Allowed"
     })
 
 
-
-
 def categories(request, category=None):
-    # Get all categories
     categories_list = Auction.CATEGORY
 
-    # Check if valid category as URL parameter
     if category is not None:
-        if category in [x[0] for x in categories_list]:
-            category_full = [x[1] for x in categories_list if x[0] == category][0]
-
-            # Get all auctions from this category
+        if category in [choice[0] for choice in categories_list]:
+            choice_in_category = [choice[1] for choice in categories_list if choice[0] == category][0]
             auctions = Auction.objects.filter(category=category, closed=False)
+            
             return render(request, "auctions/category.html", {
                 "auctions": auctions,
-                "category_full": category_full
-            })
-        else:
-            return render(request, "auctions/error_handling.html", {
-                "code": 400,
-                "message": "Incorrect Category"
+                "choice_in_category": choice_in_category
             })
 
     return render(request, "auctions/error_handling.html", {
-        "code": 404,
+        "status_code": 404,
         "message": "This page doesn't exist"
     })
 
 
-
-    
-
-
-
-@login_required(login_url="/login")
+@login_required
 def close_auction(request, auction_id):
-    """Close Auction view: only POST method allowed, handles closing auction logic."""
-    # Get current auction if exists
     try:
         auction = Auction.objects.get(pk=auction_id)
     except Auction.DoesNotExist:
         return render(request, "auctions/error_handling.html", {
-            "code": 404,
+            "status_code": 404,
             "message": "Auction id doesn't exist"
         })
-
-    # Close auction
     if request.method == "POST":
         auction.closed = True
         auction.save()
-    elif request.method == "GET":
-        return render(request, "auctions/error_handling.html", {
-            "code": 405,
-            "message": "Method Not Allowed"
-        })
-
-    # Redirect to auction page
     return HttpResponseRedirect("/" + auction_id)
 
 
-
-
-@login_required(login_url="/login")
-def handle_comment(request, auction_id):
-    """Handle comment view: only POST method allowed, handles posting comments on auction."""
-    # Get current auction if exists
-    try:
-        auction = Auction.objects.get(pk=auction_id)
-    except Auction.DoesNotExist:
-        return render(request, "auctions/error_handling.html", {
-            "code": 404,
-            "message": "Auction id doesn't exist"
-        })
-
-    # Post comment
+@login_required
+def comment(request, auction_id):
     if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            # Get all data from the form
-            comment = form.cleaned_data["comment"]
-
-            # Save a record
+        comment_form = CommentForm(request.POST)
+        current_user = User.objects.get(pk=request.user.id)
+        auction = Auction.objects.filter(pk=auction_id).first()
+        if comment_form.is_valid():
+            comment = comment_form.cleaned_data["comment"]
             comment = Comment(
-                user=User.objects.get(pk=request.user.id),
+                user = current_user,
                 comment = comment,
                 auction = auction
             )
             comment.save()
         else:
             return render(request, "auctions/error_handling.html", {
-                "code": 400,
+                "status_code": 400,
                 "message": "Form is invalid"
             })
     elif request.method == "GET":
         return render(request, "auctions/error_handling.html", {
-            "code": 405,
+            "status_code": 405,
             "message": "Method Not Allowed"
         })
-
-    # Redirect to auction page
     return HttpResponseRedirect("/" + auction_id)
 
 
@@ -491,6 +404,6 @@ def register(request):
 
 def handle_not_found(request, exception):
     return render(request, "auctions/error_handling.html", {
-            "code": 404,
+            "status_code": 404,
             "message": "Page not found"
         })
