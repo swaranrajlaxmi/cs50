@@ -139,9 +139,9 @@ def create_listing(request):
     })
 
 
-def listing_page(request, auction_id):
-    if request.method == 'GET':
 
+def listing_page(request, auction_id):
+    
         try:
             auction = Auction.objects.get(pk=auction_id)
         except Auction.DoesNotExist:
@@ -172,8 +172,8 @@ def listing_page(request, auction_id):
                     })
             return HttpResponse("auction no more available")
         else:
+            comments = Comment.objects.filter(auction=auction_id)
             if request.user.is_authenticated:
-                comments = Comment.objects.filter(auction=auction_id)
                 watchlist_item = Watchlist.objects.filter(auction = auction_id,user = User.objects.get(id=request.user.id)).first()
                 if watchlist_item is not None:
                     isOn_watchlist = True
@@ -199,8 +199,6 @@ def listing_page(request, auction_id):
                 "auction": auction,
                 "bid_amount": bid.count(),
             })
-    else:
-        return render(request, "auctions/login.html")  
 
 
 
@@ -320,25 +318,28 @@ def close_auction(request, auction_id):
     return HttpResponseRedirect("/" + auction_id)
 
 
-@login_required
 def comment(request, auction_id):
     if request.method == "POST":
-        comment_form = CommentForm(request.POST)
-        current_user = User.objects.get(pk=request.user.id)
-        auction = Auction.objects.filter(pk=auction_id).first()
-        if comment_form.is_valid():
-            comment = comment_form.cleaned_data["comment"]
-            comment = Comment(
-                user = current_user,
-                comment = comment,
-                auction = auction
-            )
-            comment.save()
+        if request.user is not None:
+            comment_form = CommentForm(request.POST)
+            current_user = User.objects.get(pk=request.user.id)
+            auction = Auction.objects.filter(pk=auction_id).first()
+            if comment_form.is_valid():
+                comment = comment_form.cleaned_data["comment"]
+                comment = Comment(
+                    user = current_user,
+                    comment = comment,
+                    auction = auction
+                )
+                comment.save()
+            else:
+                return render(request, "auctions/error_handling.html", {
+                    "status_code": 400,
+                    "message": "Form is invalid"
+                })
         else:
-            return render(request, "auctions/error_handling.html", {
-                "status_code": 400,
-                "message": "Form is invalid"
-            })
+            return render(request, "auctions/login.html")
+            
     elif request.method == "GET":
         return render(request, "auctions/error_handling.html", {
             "status_code": 405,
