@@ -77,7 +77,7 @@ def index(request):
 
 
 
-@login_required
+@login_required(login_url="auctions:login")
 def profile(request):
     user =  Bid.objects.filter(user=request.user.id)
     bids = user.values_list("auction", flat=True).distinct()
@@ -105,7 +105,7 @@ def profile(request):
 
 
 
-@login_required
+@login_required(login_url="/login")
 def create_listing(request):
     if request.method == 'POST':
         create_listing_form = CreateListingForm(request.POST)
@@ -202,7 +202,7 @@ def listing_page(request, auction_id):
 
 
 
-@login_required
+@login_required(login_url="/login")
 def watchlist(request):
     if request.method == "POST":
         auction_id = request.POST.get("auction_id")
@@ -236,7 +236,7 @@ def watchlist(request):
     })
 
 
-@login_required
+@login_required(login_url="/login")
 def bid(request):
     if request.method == "POST":
         bid_form = BidForm(request.POST)
@@ -303,7 +303,7 @@ def categories(request, category=None):
     })
 
 
-@login_required
+@login_required(login_url="/login")
 def close_auction(request, auction_id):
     try:
         auction = Auction.objects.get(pk=auction_id)
@@ -318,9 +318,9 @@ def close_auction(request, auction_id):
     return HttpResponseRedirect("/" + auction_id)
 
 
+@login_required(login_url="/login")
 def comment(request, auction_id):
     if request.method == "POST":
-        if request.user is not None:
             comment_form = CommentForm(request.POST)
             current_user = User.objects.get(pk=request.user.id)
             auction = Auction.objects.filter(pk=auction_id).first()
@@ -337,9 +337,7 @@ def comment(request, auction_id):
                     "status_code": 400,
                     "message": "Form is invalid"
                 })
-        else:
-            return render(request, "auctions/login.html")
-            
+
     elif request.method == "GET":
         return render(request, "auctions/error_handling.html", {
             "status_code": 405,
