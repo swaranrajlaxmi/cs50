@@ -2,25 +2,21 @@
 
 {% block body %}
 
-{% comment %} <div class="sub-title">Hi {{ user.username }}</div> {% endcomment %}
+{% comment %} <div class="subject">Hi {{ user.username }}</div> {% endcomment %}
 
 <div class="user-panel">
     <div class="card mb-3 pb-5">
-        {% include "auctions/listing_layout.html" with auctions=selling sub_title="Selling" %}
+        {% include "auctions/listing_layout.html" with auctions=selling subject="Selling" %}
     </div>
-
-    <div class="card mb-3 pb-5">
-        {% include "auctions/listing_layout.html" with auctions=sold sub_title="Sold" %}
-    </div>
-
     <div class="card mb-3 pb-5">  
-        {% include "auctions/listing_layout.html" with auctions=bidding sub_title="Bidding" %}
+        {% include "auctions/listing_layout.html" with auctions=bidding subject="Bidding" %}
     </div>
-
+    <div class="card mb-3 pb-5">
+        {% include "auctions/listing_layout.html" with auctions=sold subject="Sold" %}
+    </div>
     <div class="card pb-5">  
-        {% include "auctions/listing_layout.html" with auctions=won sub_title="Won" %}
+        {% include "auctions/listing_layout.html" with auctions=won subject="Won" %}
     </div>
-
 </div>
 
 {% endblock %}

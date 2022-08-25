@@ -145,7 +145,7 @@ def listing_page(request, auction_id):
         try:
             auction = Auction.objects.get(pk=auction_id)
         except Auction.DoesNotExist:
-            return render(request, "auctions/error_handling.html", {
+            return render(request, "auctions/handles_error.html", {
                 "status_code": 404,
                 "message": "Invalid auction id"
             })
@@ -210,7 +210,7 @@ def watchlist(request):
             auction = Auction.objects.get(pk=auction_id)
             user = User.objects.get(id=request.user.id)
         except Auction.DoesNotExist:
-            return render(request, "auctions/error_handling.html", {
+            return render(request, "auctions/handles_error.html", {
                 "status_code": 404,
                 "message": "Invalid auction id"
             })
@@ -222,7 +222,7 @@ def watchlist(request):
                 watchlist_item = Watchlist(user = user,auction = auction)
                 watchlist_item.save()
             except IntegrityError:
-                return render(request, "auctions/error_handling.html", {
+                return render(request, "auctions/handles_error.html", {
                     "status_code": 400,
                     "message": "Already on your watchlist"
                 })
@@ -247,13 +247,13 @@ def bid(request):
             user = User.objects.filter(id=request.user.id).first()
 
             if auction.seller == user:
-                return render(request, "auctions/error_handling.html", {
+                return render(request, "auctions/handles_error.html", {
                     "status_code": 400,
-                    "message": "Seller is not able to bid"
+                    "message": "Seller is not able to bid on their own product"
                 })
 
             if bid_price <= 0:
-                return render(request, "auctions/error_handling.html", {
+                return render(request, "auctions/handles_error.html", {
                     "status_code": 400,
                     "message": "Please enter bid price greater than 0"
                 })
@@ -268,17 +268,17 @@ def bid(request):
 
                 return HttpResponseRedirect("/" + auction_id)
             else:
-                return render(request, "auctions/error_handling.html", {
+                return render(request, "auctions/handles_error.html", {
                     "status_code": 400,
                     "message": "Your bid is too small for this auction"
                 })
         else:
-            return render(request, "auctions/error_handling.html", {
+            return render(request, "auctions/handles_error.html", {
                 "status_code": 400,
                 "message": "Invalid Form"
             })
 
-    return render(request, "auctions/error_handling.html", {
+    return render(request, "auctions/handles_error.html", {
         "status_code": 405,
         "message": "Method Not Allowed"
     })
@@ -297,7 +297,7 @@ def categories(request, category=None):
                 "choice_in_category": choice_in_category
             })
 
-    return render(request, "auctions/error_handling.html", {
+    return render(request, "auctions/handles_error.html", {
         "status_code": 404,
         "message": "This page doesn't exist"
     })
@@ -308,7 +308,7 @@ def close_auction(request, auction_id):
     try:
         auction = Auction.objects.get(pk=auction_id)
     except Auction.DoesNotExist:
-        return render(request, "auctions/error_handling.html", {
+        return render(request, "auctions/handles_error.html", {
             "status_code": 404,
             "message": "Auction id doesn't exist"
         })
@@ -333,13 +333,13 @@ def comment(request, auction_id):
                 )
                 comment.save()
             else:
-                return render(request, "auctions/error_handling.html", {
+                return render(request, "auctions/handles_error.html", {
                     "status_code": 400,
                     "message": "Form is invalid"
                 })
 
     elif request.method == "GET":
-        return render(request, "auctions/error_handling.html", {
+        return render(request, "auctions/handles_error.html", {
             "status_code": 405,
             "message": "Method Not Allowed"
         })
@@ -402,7 +402,7 @@ def register(request):
 
 
 def handle_not_found(request, exception):
-    return render(request, "auctions/error_handling.html", {
+    return render(request, "auctions/handles_error.html", {
             "status_code": 404,
             "message": "Page not found"
         })

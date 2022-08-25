@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1>Congratulations!</h1> 
-    <h3>You bought item: {{ auction.title }} for {{ auction.current_price }} $.</h3>
-    Please contact the seller <strong>{{ auction.seller.username }}</strong> for further process.
+    <h3>you bought {{ auction.title }} for $ {{ auction.current_price }}.</h3>
+    Please contact the seller <strong>{{ auction.seller.username }}</strong> to proceed.
 
 {% endblock %}

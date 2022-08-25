@@ -1,5 +1,5 @@
-<div class="sub-title">
-    {{ sub_title }}
+<div class="subject">
+    {{ subject }}
 </div>
 
 <div class="container ">
@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <h5 class="card-title"> {{ auction.title }} </h5>
                     <div>
-                        <strong>Price:</strong> {{auction.current_price}} $
+                        <strong>Price:</strong> $ {{auction.current_price}}
                     </div>
                     <div class="mb-2">
                         <strong>Category:</strong> {{auction.get_category_display}}
