@@ -52,8 +52,8 @@ function load_mailbox(mailbox) {
   document.querySelector('#message-view').innerHTML = "";
 
   // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-
+  mailboxNameHtml = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  document.querySelector('#emails-view').innerHTML = mailboxNameHtml;
 
     //fetch emails from api
     fetch(`/emails/${mailbox}`)
@@ -82,10 +82,12 @@ function load_mailbox(mailbox) {
         });
         
         // render different values based on the mailbox
+        sentHtml = `<span>${recipients}</span> <span>${subject}</span> <span>${time}</span>`;
+        inboxHtml = `<span>${sender}</span> <span>${subject}</span> <span>${time}</span>`;
         if (mailbox === 'sent') {
-          email.innerHTML = `<span>${recipients}</span> <span>${subject}</span> <span>${time}</span>`;
+          email.innerHTML = sentHtml;
         } else {  
-          email.innerHTML = `<span>${sender}</span> <span>${subject}</span> <span>${time}</span>`;
+          email.innerHTML = inboxHtml;
         }
   
         // append email
@@ -128,8 +130,9 @@ function load_mailbox(mailbox) {
   
       // get div element and populate with values of email
       const message = document.querySelector('#message-view');
-      message.innerHTML = `<p><span class="m">To:</span> ${recipients}</p> <p><span class="m">From:</span> ${sender}</p> <p><span class="m">Subject:</span> ${subject}</p> <p><span class="m">Time:</span> ${time}<p> <p id="body">${body}</p>`;
-  
+      messageHtml = `<p><span class="m">To:</span> ${recipients}</p> <p><span class="m">From:</span> ${sender}</p> <p><span class="m">Subject:</span> ${subject}</p> <p><span class="m">Time:</span> ${time}<p> <p id="body">${body}</p>`;
+      message.innerHTML = messageHtml;
+
       // display button if not in sent mailbox
       const userEmail = document.querySelector('h2').innerHTML;
       if (userEmail != sender) {
@@ -175,9 +178,7 @@ function load_mailbox(mailbox) {
   
   function replyEmail(email) {
     compose_email();
-    // Populate inputs with email info
     document.querySelector('#compose-recipients').value = email['sender'];
-    // only add re: once in subject line
     if (email['subject'].startsWith('Re:')) {
       document.querySelector('#compose-subject').value = email['subject'];
     } else {
