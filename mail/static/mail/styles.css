@@ -1,0 +1,100 @@
+/* import google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+
+.container-fluid {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  
+  #nav {
+    padding: 2%;
+    padding-top: 1%;
+    position: fixed;
+    z-index: 1;
+    min-height: 120px;
+    width: 100%;
+    background-color: white;
+    border-bottom: rgb(240, 240, 240) 2px solid;
+  }
+  
+  #main {
+    padding: 120px 2% 2% 2%;
+  }
+  
+  h2,
+  h3 {
+    color: #204953;
+    font-size: 150%;
+  }
+  
+  button {
+    margin: 5px 0px !important;
+  }
+  
+  textarea {
+      min-height: 400px;
+  }
+  
+  /* retain white space from textarea aka the email body */
+  p#body {
+    white-space: pre-wrap;
+  }
+  
+  /* email messages listed in mailboxes (list of messages) */
+  .message {
+    display: flex;
+    opacity: 70%;
+    padding: 1%;
+    border-bottom: 1px solid black;
+  }
+  
+  .message:hover {
+    opacity: 100%;
+  }
+  
+  /* sender subject and timestamp of email message inside this element */
+  .message  span {
+    flex: 1;
+  }
+  
+  .email-read {
+    background-color: rgb(240, 240, 240);
+  }
+  
+  /* styling in message (to: from: subject: etc...) */
+  span.m {
+    font-weight: bold;
+  }
+  
+  a,
+  a:hover {
+    color: #306d7c;
+  }
+  
+  /* input box shadow color when input is in focus state */
+  .form-control:focus {
+    box-shadow: 0px 0px 3px 3px rgb(230, 230, 230);
+    border: 1px solid #204953;
+  }
+  
+  /* for displaying mailbox list on mobile devices */
+  @media only screen and (max-width: 575px) {
+    .message {
+      display: block;
+    }
+  
+    span {
+      display: inline-block;
+      /* height: 40px; */
+      min-width: 40%;
+    }
+  
+    span.m {
+      display: inline;
+    }
+  }
