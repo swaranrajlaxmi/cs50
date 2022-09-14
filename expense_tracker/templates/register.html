@@ -5,27 +5,32 @@
       style="width: 185px;" alt="logo">
     <h4 class="mt-1 mb-5 pb-1">Expense Tracker</h4>
 </div>
-<form>
-    <p>Please login to your account</p>
 
+{% if message %}
+    <div>{{ message }}</div>
+{% endif %}
+
+<form action="{% url 'register' %}" method="post">
+    <p>Please register</p>
+    {% csrf_token %}
     <div class="form-outline mb-4">
-        <input type="email" class="form-control" placeholder="Username" />
+      <input type="text" class="form-control" name="username" placeholder="Username" />
     </div>
 
     <div class="form-outline mb-4">
-        <input type="email" class="form-control" placeholder="Email Address" />
+      <input type="email" class="form-control" name="email" placeholder="Email Address" />
     </div>
 
     <div class="form-outline mb-4">
-        <input type="email" class="form-control" placeholder="Password" />
+      <input type="password" class="form-control" name="password" placeholder="Password" />
     </div>
 
     <div class="form-outline mb-4">
-        <input type="password"  class="form-control" placeholder="Confirm Password"/>
+      <input type="password"  class="form-control" name="confirmation" placeholder="Confirm Password"/>
     </div>
 
     <div class="text-center pt-1 mb-5 pb-1">
-      <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Register</button>
+      <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Register</button>
       {% comment %} <a class="text-muted" href="#!">Forgot password?</a> {% endcomment %}
     </div>
 
