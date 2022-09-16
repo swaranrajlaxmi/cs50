@@ -1,0 +1,18 @@
+.expense_notes{
+    color: darkgray;   
+}
+
+.expense_amount{
+    color: #b60101;
+    font-weight: 500;
+}
+
+.expense_category{
+    font-family: system-ui;
+    font-weight: 500;
+}
+
+.expense_date{
+    color: dimgray;
+    font-style: initial;
+}

@@ -14,6 +14,10 @@ def index(request):
         return HttpResponseRedirect(reverse("login"))
 
 
+def profile(request):
+    return render(request, "profile.html")
+
+
 def login_view(request):
     if request.method == "POST":
 
