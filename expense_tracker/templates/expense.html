@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+  <div>
+    <h2>expense graph</h2>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <p class="mb-0 expense_date">{{date}}Fri, 16 September 2022</p>
+    </div>
+    <div class="card-body">
+      <div class="row mt-2">
+        <div class="col-sm-6 expense_category">
+            <label>{{category}}Category <span class="expense_notes">{{notes}}notes to be here</span></label>
+        </div>
+        <div class="col-sm-4">
+          <p class="mb-0 expense_amount">{{amount}}$25</p>
+        </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}
