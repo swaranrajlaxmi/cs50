@@ -1,22 +1,41 @@
 {% extends "layout.html" %}
 {% load static %}
 {% block body %}
-  <div>
-    <h2>expense graph</h2>
-  </div>
+<section style="background-color: #eee;">
   <div class="card">
+      <div class="card-header" >
+          <div class="d-flex ">
+              <div class="w-50 d-flex justify-content-start">
+                  <strong>Expenses</strong>
+              </div>
+              {% comment %} TODO: Create months and years dropdown  {% endcomment %}
+              <div class="w-50 d-flex justify-content-end">
+                <a class="" style="font-size: larger;" href="#"><i class="bi bi-plus-lg"></i></a>
+              </div>
+          </div>
+      </div>
+      <div class="card-body">
+        {% comment %} TODO: Show expense graph {% endcomment %}
+         expense graph
+       
+          
+      </div>
+  </div>
+</section>
+{% comment %} TODO: Loop through expense cards {% endcomment %}
+<div class="card">
     <div class="card-header">
-      <p class="mb-0 expense_date">{{date}}Fri, 16 September 2022</p>
+      <p class="mb-0 expense-date">{{date}}Fri, 16 September 2022</p>
     </div>
     <div class="card-body">
       <div class="row mt-2">
-        <div class="col-sm-6 expense_category">
-            <label>{{category}}Category <span class="expense_notes">{{notes}}notes to be here</span></label>
+        <div class="col-sm-6 expense-category">
+            <label>{{category}}Category <span class="expense-notes">{{notes}}notes to be here</span></label>
         </div>
         <div class="col-sm-4">
-          <p class="mb-0 expense_amount">{{amount}}$25</p>
+          <p class="mb-0 expense-amount">{{amount}}$25</p>
         </div>
         </div>
     </div>
-  </div>
+</div>
 {% endblock %}

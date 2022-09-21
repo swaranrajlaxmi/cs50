@@ -1,18 +1,23 @@
-.expense_notes{
+.expense-notes{
     color: darkgray;   
 }
 
-.expense_amount{
+.expense-amount{
     color: #b60101;
     font-weight: 500;
 }
 
-.expense_category{
+.expense-category{
     font-family: system-ui;
     font-weight: 500;
 }
 
-.expense_date{
+.expense-date{
     color: dimgray;
     font-style: initial;
+}
+
+.create-budget-link{
+    color: forestgreen;
+    font-size: larger;
 }

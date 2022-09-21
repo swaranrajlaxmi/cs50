@@ -18,6 +18,14 @@ def profile(request):
     return render(request, "profile.html")
 
 
+def budget(request):
+    return render(request, "budget.html")
+
+
+def create_budget(request):
+    return render(request, "create_budget.html")
+
+
 def login_view(request):
     if request.method == "POST":
 
@@ -69,3 +77,6 @@ def register(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
+
+
