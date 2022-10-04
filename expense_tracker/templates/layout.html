@@ -35,6 +35,9 @@
                   <a class="nav-link active" href="{% url 'budget' %}">Budgets</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'settings' %}">Settings</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                 </li>
               </ul>
@@ -44,7 +47,8 @@
         {% endif %}
         {% block body %}
         {% endblock %}
-        {% block script %}
+        {% block script %} 
+            <script src="{% static 'expense.js'%}"></script> 
         {% endblock %}
     </body>
 </html>

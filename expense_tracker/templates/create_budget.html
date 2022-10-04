@@ -22,21 +22,15 @@
                 </div>
             </div>
             <div class="mb-3 row mt-3">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Amount {{currency}}(SGD)</label>
+                <label for="" class="col-sm-2 col-form-label">Amount {{currency}}(SGD)</label>
                 <div class="col-sm-10">
-                  <input type="password" class="form-control" id="inputPassword">
+                  <input type="" class="form-control" placeholder="Enter your monthly budget here">
                 </div>
             </div>
             <div class="mb-3 row mt-3">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Period </label>
+                <label class="col-sm-2 col-form-label">Reset Date</label>
                 <div class="col-sm-10">
-                    
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected >Monthly (Reset Date)</option>
-                        {% comment %} TODO: {% for i in range(28) %} {% endcomment %}
-                        <option value="numbers"></option>
-                        {% comment %} {% endfor %} {% endcomment %}
-                    </select>
+                    <p class="mt-2 text-muted">01-09-2022{{fromdate}} - 30-09-2022{{todate}}</p>
                 </div>
             </div>
         </div>
