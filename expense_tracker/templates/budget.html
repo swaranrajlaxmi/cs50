@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+<div class="card" id="budget">
+    <div class="card-header">
+        <div class="d-flex ">
+            <div class="w-50 mt-2 d-flex justify-content-start">
+                <strong>Budget</strong>
+            </div>
+            <div class="w-50 d-flex justify-content-end">
+                <button class="btn btn-link">Edit</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body text-center">
+      <h5 class="card-title">Monthly $100{{currency}}{{amount}}</h5>
+      <p class="mb-0 expense-date">01-09-2022{{fromdate}} - 30-09-2022{{todate}}</p>
+      <h1 class="text-success">{{currency}}{{amount}}$66</h1>
+      <p class="card-text text-success">left to spend</p>
+      {% comment %} TODO: category wise budgeting {% endcomment %}
+</div>
+
+
+
+<div class="card text-center" id="create-budget">
+    <div class="card-header ">
+        <a class="create-budget-link" href="{% url 'create_budget' %}">Create Budget</a>
+    </div>
+    <div class="card-body text-center">
+      <p class="card-text">No budget created so far.</p>
+    </div>
+</div>
+{% endblock%}

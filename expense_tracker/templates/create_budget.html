@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+<section style="background-color: #eee;">
+    <div class="card">
+        <div class="card-header" >
+            <div class="d-flex ">
+                <div class="w-50 d-flex justify-content-start">
+                    New Budget
+                </div>
+                {% comment %} TODO: toggle between skip and save button {% endcomment %}
+                <div class="w-50 d-flex justify-content-end">
+                    <button type="button" class="btn text-bg-primary"><a class="nav-link active" href="{% url 'index' %}">Skip</a></button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-3 row mt-3">
+                <label class="col-sm-2 col-form-label">Category</label>
+                <div class="col-sm-10">
+                    <label class="col-sm-2 col-form-label text-muted">All</label>
+                </div>
+            </div>
+            <div class="mb-3 row mt-3">
+                <label for="" class="col-sm-2 col-form-label">Amount {{currency}}(SGD)</label>
+                <div class="col-sm-10">
+                  <input type="" class="form-control" placeholder="Enter your monthly budget here">
+                </div>
+            </div>
+            <div class="mb-3 row mt-3">
+                <label class="col-sm-2 col-form-label">Reset Date</label>
+                <div class="col-sm-10">
+                    <p class="mt-2 text-muted">01-09-2022{{fromdate}} - 30-09-2022{{todate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
