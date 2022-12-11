@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+<section style="background-color: #eee;">
+  <div class="card">
+      <div class="card-header" >
+          <div class="d-flex ">
+              <div class="w-50 d-flex justify-content-start">
+                  <strong>Expenses</strong>
+              </div>
+              {% comment %} TODO: Create months and years dropdown  {% endcomment %}
+              <div class="w-50 d-flex justify-content-end">
+                <a class="fw-bolder fs-3" href="{% url 'add_expense' %}"><i class="bi bi-plus-lg"></i></a>
+              </div>
+          </div>
+      </div>
+      <div class="card-body">
+        {% comment %} TODO: Show expense graph {% endcomment %}
+         expense graph
+         
+       
+          
+      </div>
+  </div>
+</section>
+{% for expense in expenses %}
+  <div class="card" >
+      <div class="card-header" style="border-bottom: dodgerblue;">
+        <div class="d-flex ">
+          <div class="w-50 mt-2 d-flex justify-content-start">
+            <p class="mb-0 expense-date">{{expense.date}}{{expense.id}}</p>
+          </div>
+          <div class="w-50 d-flex justify-content-end">
+            <a class="fw-bolder " href="add_expense?id={{expense.id}}  "><i class="bi bi-pencil" ></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="row mt-2">
+          <div class="col-sm-6 expense-category">
+            <label>{{expense.category}} <span class="expense-notes">{{expense.notes}}</span></label>
+          </div>
+          <div class="col-sm-4">
+            <p class="mb-0 expense-amount">${{expense.amount}}</p>
+          </div>
+          </div>
+      </div>
+  </div>
+{% endfor %}
+{% endblock %}

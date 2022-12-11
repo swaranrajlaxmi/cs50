@@ -7,9 +7,6 @@
                 <div class="w-50 mt-2 d-flex justify-content-start">
                     <strong>My Profile</strong>
                 </div>
-                <div class="w-50 d-flex justify-content-end">
-                    <button class="btn btn-link">Edit</button>
-                </div>
             </div>
         </div>
         <div class="card-body">
@@ -18,7 +15,7 @@
                 <p class="mb-0">Username</p>
             </div>
             <div class="col-sm-9">
-                <p class="text-muted mb-0">{{username}}username</p>
+                <p class="text-muted mb-0">{{username}}</p>
             </div>
             </div>
             <hr>
@@ -27,7 +24,7 @@
                 <p class="mb-0">Email</p>
             </div>
             <div class="col-sm-9">
-                <p class="text-muted mb-0">{{email}}email</p>
+                <p class="text-muted mb-0">{{email}}</p>
             </div>
             </div>
         </div>
@@ -35,6 +32,7 @@
   </section>
 
   <section style="background-color: #eee;">
+    <form action="{% url 'change_password' %}" method="post">
     <div class="card">
         <div class="card-header" >
             <div class="d-flex ">
@@ -42,7 +40,7 @@
                     <strong>Change Password</strong>
                 </div>
                 <div class="w-50 d-flex justify-content-end">
-                    <button type="button" class="btn btn-success">Save</button>
+                    <button type="submit" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -73,6 +71,7 @@
             </div>
         </div>
     </div>
+</form>
   </section>
     
 
