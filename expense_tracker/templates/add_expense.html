@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+<section style="background-color: #eee;">
+    <form action="{% url 'add_expense' %}" method="post">   
+    <div class="card">
+        <div class="card-header" >
+            <div class="d-flex ">
+                <div class="w-50 d-flex justify-content-start">
+                    Add Expense
+                </div>
+                <div class="w-50 d-flex justify-content-end">
+                    <button type="submit" class="btn text-bg-primary">Save</button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="id" value={{id}}>
+
+        <div class="card-body">
+            <div class="mb-3 row mt-3">
+                <label class="col-sm-2 col-form-label">Amount {{currency}}(SGD)</label>
+                <div class="col-sm-10">
+                    <input type="number" required name="expense_amount" class="form-control" min="0" oninput="validity.valid||(value='');" placeholder="Enter expense here" value={{amount}}>
+                </div>
+            </div>
+
+            <div class="mb-3 row mt-3">
+                <label for="" class="col-sm-2 col-form-label">Category</label>
+                <div class="col-sm-10">
+                    <select required name="category_key" class="form-select" aria-label="Default select example">
+                        {% for category_key, category_value in category_choices %} 
+                            {% if category == category_value %}
+                                <option selected value={{ category_key }}>{{ category_value }}</option>
+                            {% else %}
+                                <option value={{ category_key }}>{{ category_value }}</option>
+                            {% endif %}
+
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3 row mt-3">
+                <label for="" class="col-sm-2 col-form-label">Notes</label>
+                <div class="col-sm-10">
+                  <textarea type="text" name="expense_notes" class="form-control" placeholder="Add notes here " >{{notes}}</textarea>
+                </div>
+            </div>
+            
+            <div class="mb-3 row mt-3">
+                <label for="" class="col-sm-2 col-form-label">Date </label>
+                <div class="col-sm-10">
+                    <input type="date" required name="expense_date" class="form-control" value={{date}}>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</section>
+{% endblock %}
