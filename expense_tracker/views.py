@@ -130,6 +130,22 @@ def budget(request):
     else:
         return HttpResponseRedirect(reverse("set_budget"))
 
+@login_required
+def get_category_agg(request): 
+    budget_dates = get_expense_budget_period(request.user)
+    aggexp = Expense.objects.filter(user = request.user, date__gte=budget_dates["start_date"], date__lte=budget_dates["end_date"]).values('category').annotate(total=Sum('amount')).order_by()
+    res = []
+    for cat in aggexp: 
+        category = Category.objects.get(id=cat["category"])
+        res.append({
+            "category_name": category.get_category_display(),
+            "id": cat["category"],
+            "total": int(cat["total"])
+        })
+    
+    return JsonResponse({
+        "res": res
+    })
 
 @login_required
 @csrf_exempt

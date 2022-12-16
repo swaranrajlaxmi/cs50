@@ -12,5 +12,6 @@ urlpatterns = [
     path("add_expense", views.add_expense, name="add_expense"),
     path("settings", views.settings, name="settings"),
     path("change_password", views.change_password, name="change_password"),
+    path("expense_category", views.get_category_agg, name="expense_category"),
     
 ]
