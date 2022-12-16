@@ -20,15 +20,14 @@
             <div class="mb-3 row mt-3">
                 <label class="col-sm-2 col-form-label">Amount {{currency}}(SGD)</label>
                 <div class="col-sm-10">
-                    <input type="number" name="expense_amount" class="form-control" min="0" oninput="validity.valid||(value='');" placeholder="Enter expense here" value={{amount}}>
+                    <input type="number" required name="expense_amount" class="form-control" min="0" oninput="validity.valid||(value='');" placeholder="Enter expense here" value={{amount}}>
                 </div>
             </div>
 
             <div class="mb-3 row mt-3">
                 <label for="" class="col-sm-2 col-form-label">Category</label>
                 <div class="col-sm-10">
-                    <select name="category_key" class="form-select" aria-label="Default select example">
-                        <option placeholder="">Select Category</option>
+                    <select required name="category_key" class="form-select" aria-label="Default select example">
                         {% for category_key, category_value in category_choices %} 
                             {% if category == category_value %}
                                 <option selected value={{ category_key }}>{{ category_value }}</option>
@@ -51,7 +50,7 @@
             <div class="mb-3 row mt-3">
                 <label for="" class="col-sm-2 col-form-label">Date </label>
                 <div class="col-sm-10">
-                    <input type="date" name="expense_date" class="form-control" value={{date}}>
+                    <input type="date" required name="expense_date" class="form-control" value={{date}}>
                 </div>
             </div>
         </div>

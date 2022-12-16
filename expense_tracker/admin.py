@@ -9,7 +9,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class SettingsAdmin(admin.ModelAdmin):
-    list_display = ("id", "currency", "reset_day" )
+    list_display = ("id", "user", "currency", "reset_day" )
 
 
 class BudgetAdmin(admin.ModelAdmin):

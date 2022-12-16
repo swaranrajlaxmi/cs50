@@ -2,15 +2,15 @@
 {% load static %}
 {% block body %}
 <section style="background-color: #eee;">
+    <form action="{% url 'settings' %}" method="post"> 
     <div class="card settings-card">
         <div class="card-header" >
             <div class="d-flex ">
                 <div class="w-50 mt-2 d-flex justify-content-start">
                     <strong>Settings</strong>
                 </div>
-                {% comment %} TODO:toggle between save and edit {% endcomment %}
                 <div class="w-50 d-flex justify-content-end">
-                    <button type="button" class="btn text-bg-success" onclick="saveSettings()">Save</button>
+                    <button type="submit" class="btn text-bg-success">Save</button>
                 </div>
             </div>
         </div>
@@ -45,5 +45,6 @@
             </div>
         </div>
     </div>
+</form>
 </section>
 {% endblock %}
