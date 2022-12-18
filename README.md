@@ -1,8 +1,10 @@
 # Expense Tracker 💸
 The `expense-tracker` app lets you manage your expense by tracking them for you. Also, it is possible to `budget` your expenditure so that you don't spend more than you need to.
 
+## Demo Video
+https://youtu.be/pJ_IU12ipus
+
 ## Features
----
 ### Add expense
 With a button click ➕ a simple UI can help you record an expense with the app. The expenditure will then appear on the list of expenses on the home screen. You can add spending with a proper `category`, `date`, and `amount`.
 
@@ -20,7 +22,7 @@ On the budget page, a `donut chart` shows the categories in which you are spendi
 - You have the flexibility to start your budget cycle from any day of the month. The `reset day` set out a day on which you want to start your budget(maybe your salary day 😉). By default, it is set to the first of every month.
 
 ### Profile
-In the profile section, you can see your current email and username. You can also `change password` if required. 
+In the profile section, you can see your current email and username. You can also `change password` if required.
 
 # Project design
 ## Tech stack
@@ -83,7 +85,7 @@ _ The `expense.js` and `budget.js` files have logic for their respective javascr
 ## How to run
 ### Install packages
 ``` 
-    pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 ### To make migrations
 ```
