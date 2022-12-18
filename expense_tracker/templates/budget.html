@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+{% if budget_amount != 0 %}
+    <div class="card budget">
+        <div class="card-header">
+            <div class="d-flex ">
+                <div class="w-50 mt-2 d-flex justify-content-start">
+                    <strong>Budget</strong>
+                </div>
+                <div class="w-50 d-flex justify-content-end">
+                    <button class="btn btn-link" ><a class="create-budget-link" href="{% url 'set_budget' %}">Edit</a></button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body text-center">
+        <h5 class="card-title">Monthly {{currency}} {{budget_amount}}</h5>
+        <p class="mb-0 expense-date">{{start_date}} - {{end_date}}</p>
+        <p><h3 style="color: #01b652;">{{currency}} {{left_amount}}</h3></p>
+        <p class="card-text text-success">left to spend</p>
+      
+</div>
+<div row="justify-content-md-center">
+    <div class="col-md-6 offset-md-3">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
+
+
+
+
+
+{% else %}
+    <div class="card text-center" id="set-budget">
+        <div class="card-header ">
+            <a class="create-budget-link" href="{% url 'set_budget' %}">Create Budget</a>
+        </div>
+        <div class="card-body text-center">
+        <p class="card-text">No budget created so far.</p>
+        </div>
+    </div>
+   
+{% endif %} 
+    {% block script %} 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'budget.js'%}"></script> 
+    {% endblock %}
+{% endblock%}
